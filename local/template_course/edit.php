@@ -60,10 +60,11 @@ if ($id) {
 
 } else if ($categoryid == 1) { //REVISAR PERMISOS!!!!!
     // Creating new template course.
-    print "categoria 0!!!!";
+    print "categoria 1!!!!";
     $course = null;
     require_login();
     $category = $DB->get_record('course_categories', array('id'=>$categoryid), '*', MUST_EXIST);
+    //var_dump($category);
     $catcontext = context_coursecat::instance($category->id);
     require_capability('moodle/course:create', $catcontext);
     $PAGE->set_context($catcontext);
@@ -99,6 +100,8 @@ if (!empty($course)) {
     $editoroptions['context'] = $catcontext;
     $editoroptions['subdirs'] = 0;
     $course = file_prepare_standard_editor($course, 'summary', $editoroptions, null, 'course', 'summary', null);
+    print 'aaa';
+    var_dump($course);
     if ($overviewfilesoptions) {
         file_prepare_standard_filemanager($course, 'overviewfiles', $overviewfilesoptions, null, 'course', 'overviewfiles', 0);
     }
@@ -106,6 +109,9 @@ if (!empty($course)) {
 
 // First create the form.
 $editform = new template_course_edit_form(NULL, array('course'=>$course, 'category'=>$category, 'editoroptions'=>$editoroptions, 'returnto'=>$returnto));
+print 
+$category->id;
+print 'bbb';
 
 if ($editform->is_cancelled()) {
         switch ($returnto) {
@@ -135,9 +141,10 @@ if ($editform->is_cancelled()) {
     // Process data if submitted.
     if (empty($course->id)) {
         // In creating the course.
-        //var_dump($data);
+        print '<br/>ARRIBO!!!!!!!!!!!!!';
+        var_dump($data);
         $course = create_course($data, $editoroptions);
-        var_dump($course);
+        
         
     /* AL LORO: NO VOLEM USUARIS ADJUNTS  
         // Get the context of the newly created course. 
@@ -160,17 +167,20 @@ if ($editform->is_cancelled()) {
             }
         }
     */
+        
     } else {
         // Save any changes to the files used in the editor.
+        print 'update';
         update_course($data, $editoroptions);
     }
 
     // Redirect user to newly created/updated course.
-    //redirect(new moodle_url('/course/view.php', array('id' => $course->id)));
+    redirect(new moodle_url('/local/template_course/view.php', array('id' => $course->id)));
 }
 
 // Print the form.
 
+print 'imprimeixo el formulari';
 
 $site = get_site();
 
@@ -198,7 +208,6 @@ echo $OUTPUT->header();
 
 echo $OUTPUT->heading($streditcoursesettings);
 
-echo 'contingut, id del curs: ' . $course->id;
 $editform->display();
 
 

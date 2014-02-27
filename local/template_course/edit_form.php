@@ -24,7 +24,7 @@ class template_course_edit_form extends moodleform {
                 array(array('formid' => $mform->getAttribute('id'))));
 
         $course = $this->_customdata['course']; // this contains the data of this form
-        $category = $this->_customdata['category']; //template course !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        $category = $this->_customdata['category']; //template course
         $editoroptions = $this->_customdata['editoroptions'];
         $returnto = $this->_customdata['returnto'];
 
@@ -69,17 +69,17 @@ class template_course_edit_form extends moodleform {
             $mform->setConstant('shortname', $course->shortname);
         }
         
-        //Categoria 0
-        $mform->addElement('hidden', 'category', 0);
+        //Categoria Template
+        $mform->addElement('hidden', 'category', $category->id);
+        $mform->setType('category', PARAM_INT);
+        $mform->setDefault('category', $category->id);
 
-        $choices = array();
-        $choices['0'] = get_string('hide');
-        $choices['1'] = get_string('show');
-        $mform->addElement('select', 'visible', get_string('visible'), $choices);
-        $mform->addHelpButton('visible', 'visible');
-        $mform->setDefault('visible', $courseconfig->visible);
-        
-        if (!empty($course->id)) {
+        //$choices = array();
+        //$choices['0'] = get_string('hide');
+        //$choices['1'] = get_string('show');
+        $mform->addElement('hidden', 'visible', $courseconfig->hidden);
+
+      /*  if (!empty($course->id)) {
             if (!has_capability('moodle/course:visibility', $coursecontext)) {
                 $mform->hardFreeze('visible');
                 $mform->setConstant('visible', $course->visible);
@@ -89,16 +89,16 @@ class template_course_edit_form extends moodleform {
                 $mform->hardFreeze('visible');
                 $mform->setConstant('visible', $courseconfig->visible);
             }
-        }
-
-        $mform->addElement('date_selector', 'startdate', get_string('startdate'));
-        $mform->addHelpButton('startdate', 'startdate');
-        $mform->setDefault('startdate', time() + 3600 * 24);
+        }*/
+        
+        //DATA = PERIODEEEEEE
+        $mform->addElement('duration', 'startdate', 'Course duration');
+        //$mform->addHelpButton('startdate', 'startdate');
+        $mform->setDefault('startdate', + 3600 * 24);
 
         $mform->addElement('text','idnumber', get_string('idnumbercourse'),'maxlength="100"  size="10"');
-        $mform->addHelpButton('idnumber', 'idnumbercourse');
+        //$mform->addHelpButton('idnumber', 'idnumbercourse');
         $mform->setType('idnumber', PARAM_RAW);
-        
         if (!empty($course->id) and !has_capability('moodle/course:changeidnumber', $coursecontext)) {
             $mform->hardFreeze('idnumber');
             $mform->setConstants('idnumber', $course->idnumber);
@@ -113,11 +113,11 @@ class template_course_edit_form extends moodleform {
         $mform->setType('summary_editor', PARAM_RAW);
         $summaryfields = 'summary_editor';
 
-        /*if ($overviewfilesoptions = course_overviewfiles_options($course)) {
+        if ($overviewfilesoptions = course_overviewfiles_options($course)) {
             $mform->addElement('filemanager', 'overviewfiles_filemanager', get_string('courseoverviewfiles'), null, $overviewfilesoptions);
             $mform->addHelpButton('overviewfiles_filemanager', 'courseoverviewfiles');
             $summaryfields .= ',overviewfiles_filemanager';
-        }*/
+        }
 
         if (!empty($course->id) and !has_capability('moodle/course:changesummary', $coursecontext)) {
             // Remove the description header it does not contain anything any more.
@@ -201,7 +201,7 @@ class template_course_edit_form extends moodleform {
         // Files and uploads.
         $mform->addElement('header', 'filehdr', get_string('filesanduploads'));
 
-       if (!empty($course->legacyfiles) or !empty($CFG->legacyfilesinnewcourses)) {
+        if (!empty($course->legacyfiles) or !empty($CFG->legacyfilesinnewcourses)) {
             if (empty($course->legacyfiles)) {
                 //0 or missing means no legacy files ever used in this course - new course or nobody turned on legacy files yet
                 $choices = array('0'=>get_string('no'), '2'=>get_string('yes'));
@@ -280,7 +280,6 @@ class template_course_edit_form extends moodleform {
         // Finally set the current form data
         $this->set_data($course);
     }
-
         
     /**
      * Fill in the current page data for this course.
@@ -351,7 +350,9 @@ class template_course_edit_form extends moodleform {
         if (!empty($formaterrors) && is_array($formaterrors)) {
             $errors = array_merge($errors, $formaterrors);
         }
-
+        print '<br/>ERRORS: <br/>';
+        var_dump($errors);
+        
         return $errors;
     }
 }

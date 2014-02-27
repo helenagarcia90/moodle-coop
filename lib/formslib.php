@@ -476,8 +476,10 @@ abstract class moodleform {
         $mform =& $this->_form;
         $nosubmit = false;
         if (!$this->is_submitted()){
+            print 'hellow';
             return false;
         }
+        var_dump($mform->_noSubmitButtons);
         foreach ($mform->_noSubmitButtons as $nosubmitbutton){
             if (optional_param($nosubmitbutton, 0, PARAM_RAW)){
                 $nosubmit = true;
@@ -525,7 +527,9 @@ abstract class moodleform {
     function validate_defined_fields($validateonnosubmit=false) {
         static $validated = null; // one validation is enough
         $mform =& $this->_form;
+        print '50'+$this->no_submit_button_pressed();
         if ($this->no_submit_button_pressed() && empty($validateonnosubmit)){
+            print 'patata';
             return false;
         } elseif ($validated === null) {
             $internal_val = $mform->validate();
@@ -597,7 +601,11 @@ abstract class moodleform {
      */
     function get_data() {
         $mform =& $this->_form;
-
+        print 'validacions';
+        print '1' + $this->is_cancelled();
+        print '1' + $this->is_submitted();
+        print '1' + $this->is_validated();
+        
         if (!$this->is_cancelled() and $this->is_submitted() and $this->is_validated()) {
             $data = $mform->exportValues();
             unset($data['sesskey']); // we do not need to return sesskey

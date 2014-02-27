@@ -12,7 +12,7 @@ require_once($CFG->libdir.'/completionlib.php');
 require_once($CFG->libdir.'/filelib.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/course/format/lib.php');
-
+require_once($CFG->dirroot.'/course/renderer.php');
 
 //string['edittemplatecoursesettings'] = "";
 //string['addnewtemplatecourse'] = "";

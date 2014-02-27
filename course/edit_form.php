@@ -374,7 +374,8 @@ class course_edit_form extends moodleform {
         if (!empty($formaterrors) && is_array($formaterrors)) {
             $errors = array_merge($errors, $formaterrors);
         }
-
+        print '<br/>ERRORS: <br/>';
+        var_dump($errors);
         return $errors;
     }
 }

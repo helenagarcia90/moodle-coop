@@ -1,4 +1,5 @@
 <?php
+
 	require_once ('../../config.php');
         require_once('lib.php');
         
@@ -24,8 +25,8 @@
         
         //RENDERER
         $PAGE->set_pagelayout('coursecategory');
-        $courserenderer = $PAGE->get_renderer('core', 'course');
-        $content = $courserenderer->course_category($categoryid);
+        //$courserenderer = $PAGE->get_renderer('core', 'course');
+        //$content = $courserenderer->course_category($categoryid);
         
         //IMPRIMIM EL CONTINGUT        
         $site = get_site();
@@ -34,19 +35,47 @@
         echo $OUTPUT -> header();
       
        //CONTINGUT--------------------------------------------
-        echo $content;
+        //echo $content;
+        echo "<p> The courses taught are: </p>";
 
-        echo $OUTPUT -> footer();
+///Display Course Categories
+$query_catetories = mysql_query('SELECT cc.id, cc.parent, cc.name FROM   mdl_course_categories cc ');
+$categories = mysql_fetch_all($query_catetories);
 
-        
-/*
-        //exemple1
-	/*if ($DB->record_exists('user', array('username' => 'helena.garcia'))){
-	 	print 'helena is an existing username';
-        }
-	else {
-	 	print 'helena is not an existing username';
-	}
- */
+$tmp_categories = array();
+
+foreach ($categories AS $row) {
+
+    $row['id'] = (int) $row['id'];
+    $row['parent'] = (int) $row['parent'];
+    if (!$tmp_categories[$row['parent']])
+        $tmp_categories[$row['parent']] = array();
+    $tmp_categories[$row['parent']][] = $row;
+}
+
+$course_catetories = buildNode($tmp_categories);
+
+echo '<ul>';
+foreach ($course_catetories as $course_catetory) {
+    print_category_child($course_catetory);
+}
+echo '</ul>';
+
+echo '<li>' . $category['name'];
+if (array_key_exists('children', $category)) {
+    echo '<ul>';
+    foreach ($category['children'] as $child) {
+        print_category_child($child);
+    }
+    echo '</ul>';
+}
+echo '</li>';
+
+print 'hola';
+
+echo $OUTPUT -> footer();
+
+
  ?>
+
 
