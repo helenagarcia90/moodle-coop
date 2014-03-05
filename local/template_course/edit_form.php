@@ -22,7 +22,9 @@ class template_course_edit_form extends moodleform {
         $mform    = $this->_form;
         $PAGE->requires->yui_module('moodle-course-formatchooser', 'M.course.init_formatchooser',
                 array(array('formid' => $mform->getAttribute('id'))));
-
+        
+        // recollim elements per configurar el formulari
+        
         $course = $this->_customdata['course']; // this contains the data of this form
         $category = $this->_customdata['category']; //template course
         $editoroptions = $this->_customdata['editoroptions'];
@@ -40,17 +42,19 @@ class template_course_edit_form extends moodleform {
         }
 
         $courseconfig = get_config('moodlecourse');
-
         $this->course  = $course;
         $this->context = $context;
 
-        // Form definition with new course defaults.
+        // Form definition ---------------------------------
+        
         $mform->addElement('header','general', get_string('general', 'form'));
 
+        // variable de retorn
         $mform->addElement('hidden', 'returnto', null);
         $mform->setType('returnto', PARAM_ALPHANUM);
         $mform->setConstant('returnto', $returnto);
-
+        
+        // fullname
         $mform->addElement('text','fullname', get_string('fullnamecourse'),'maxlength="254" size="50"');
         $mform->addHelpButton('fullname', 'fullnamecourse');
         $mform->addRule('fullname', get_string('missingfullname'), 'required', null, 'client');
@@ -59,7 +63,8 @@ class template_course_edit_form extends moodleform {
             $mform->hardFreeze('fullname');
             $mform->setConstant('fullname', $course->fullname);
         }
-
+        
+        // shortname
         $mform->addElement('text', 'shortname', get_string('shortnamecourse'), 'maxlength="100" size="20"');
         $mform->addHelpButton('shortname', 'shortnamecourse');
         $mform->addRule('shortname', get_string('missingshortname'), 'required', null, 'client');
@@ -69,100 +74,39 @@ class template_course_edit_form extends moodleform {
             $mform->setConstant('shortname', $course->shortname);
         }
         
-        //Categoria Template
+        // Categoria Template
         $mform->addElement('hidden', 'category', $category->id);
         $mform->setType('category', PARAM_INT);
-        $mform->setDefault('category', $category->id);
-
-        $mform->addElement('hidden', 'visible', $courseconfig->hidden);
-
+        $mform->setDefault('category', $category->id);        
         
-        //DATA = PERIODEEEEEE
+        //DATA = PERIODE
         $mform->addElement('duration', 'startdate', 'Course duration');
-        //$mform->addHelpButton('startdate', 'startdate');
-        $mform->setDefault('startdate', + 3600 * 24);
-
-        $mform->addElement('text','idnumber', get_string('idnumbercourse'),'maxlength="100"  size="10"');
-        //$mform->addHelpButton('idnumber', 'idnumbercourse');
-        $mform->setType('idnumber', PARAM_RAW);
-        if (!empty($course->id) and !has_capability('moodle/course:changeidnumber', $coursecontext)) {
-            $mform->hardFreeze('idnumber');
-            $mform->setConstants('idnumber', $course->idnumber);
-        }
+        $mform->setDefault('startdate', + 3600 * 24);       
 
         // Description.
         $mform->addElement('header', 'descriptionhdr', get_string('description'));
         $mform->setExpanded('descriptionhdr');
-
         $mform->addElement('editor','summary_editor', get_string('coursesummary'), null, $editoroptions);
         $mform->addHelpButton('summary_editor', 'coursesummary');
         $mform->setType('summary_editor', PARAM_RAW);
-        $summaryfields = 'summary_editor';
-
-        if ($overviewfilesoptions = course_overviewfiles_options($course)) {
-            $mform->addElement('filemanager', 'overviewfiles_filemanager', get_string('courseoverviewfiles'), null, $overviewfilesoptions);
-            $mform->addHelpButton('overviewfiles_filemanager', 'courseoverviewfiles');
-            $summaryfields .= ',overviewfiles_filemanager';
-        }
-
-        if (!empty($course->id) and !has_capability('moodle/course:changesummary', $coursecontext)) {
-            // Remove the description header it does not contain anything any more.
-            $mform->removeElement('descriptionhdr');
-            $mform->hardFreeze($summaryfields);
-        }
-
-        // Course format.
-        $mform->addElement('header', 'courseformathdr', get_string('type_format', 'plugin'));
-
-        $courseformats = get_sorted_course_formats(true);
-        $formcourseformats = array();
-        foreach ($courseformats as $courseformat) {
-            $formcourseformats[$courseformat] = get_string('pluginname', "format_$courseformat");
-        }
-        if (isset($course->format)) {
-            $course->format = course_get_format($course)->get_format(); // replace with default if not found
-            if (!in_array($course->format, $courseformats)) {
-                // this format is disabled. Still display it in the dropdown
-                $formcourseformats[$course->format] = get_string('withdisablednote', 'moodle',
-                        get_string('pluginname', 'format_'.$course->format));
-            }
-        }
-
+        
+        // Elements amagats, assignem valors per defecte
+        $mform->addElement('hidden','idnumber', "");
+        $mform->addElement('hidden', 'visible', $courseconfig->hidden);
+        $mform->addElement('hidden', 'overviewfiles_filemanager', 0);
         $mform->addElement('hidden', 'format', 'topics');
-
-        // Button to update format-specific options on format change (will be hidden by JavaScript).
-        //$mform->registerNoSubmitButton('updatecourseformat');
-        //$mform->addElement('submit', 'updatecourseformat', get_string('courseformatudpate'));
-
-        // Just a placeholder for the course format options.
-        $mform->addElement('hidden', 'addcourseformatoptionshere', 'numsections=>0');
-        $mform->setType('addcourseformatoptionshere', PARAM_BOOL);
-
-        // Appearance.
-        //$mform->addElement('header', 'appearancehdr', get_string('appearance'));
+        $mform->addElement('hidden', 'numsections', 0);
+        $mform->addElement('hidden', 'addcourseformatoptionshere', 0);
         $mform->addElement('hidden', 'lang', $courseconfig->lang);
         $mform->addElement('hidden', 'newsitems', 0);
         $mform->addElement('hidden', 'showgrades', 1);
         $mform->addElement('hidden', 'showreports', 1);
-
-        // Files and uploads.
-        //$mform->addElement('header', 'filehdr', get_string('filesanduploads'));
         $mform->addElement('hidden', 'legacyfiles', 0);
         $mform->addElement('hidden', 'maxbytes', 0);
-
-        //$mform->addElement('header', 'completionhdr', get_string('completion', 'completion'));
         $mform->addElement('hidden', 'enablecompletion', 0);
-
-        enrol_course_edit_form($mform, $course, $context);
-
-        //$mform->addElement('header','groups', get_string('groupsettingsheader', 'group'));
         $mform->addElement('hidden', 'groupmode', 0);
         $mform->addElement('hidden', 'groupmodeforce', 0);        //default groupings selector
         $mform->addElement('hidden', 'defaultgroupingid', 0);
-
-        // ROLES
-        //$mform->addElement('header','rolerenaming', get_string('rolerenaming'));
-        //$mform->addHelpButton('rolerenaming', 'rolerenaming');
 
         if ($roles = get_all_roles()) {
             $roles = role_fix_names($roles, null, ROLENAME_ORIGINAL);
@@ -172,13 +116,11 @@ class template_course_edit_form extends moodleform {
             }
         }
         
-        //FINAL
+        // FINAL. Assignem les dades
+        
         $this->add_action_buttons();
-
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
-
-        // Finally set the current form data
         $this->set_data($course);
     }
         
@@ -209,6 +151,7 @@ class template_course_edit_form extends moodleform {
             $courseformat = course_get_format((object)array('format' => $formatvalue[0]));
 
             $elements = $courseformat->create_edit_form_elements($mform);
+            var_dump($elements);
             for ($i = 0; $i < count($elements); $i++) {
                 $mform->insertElementBefore($mform->removeElement($elements[$i]->getName(), false),
                         'addcourseformatoptionshere');

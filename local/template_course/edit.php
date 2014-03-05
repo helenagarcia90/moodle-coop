@@ -175,7 +175,8 @@ if ($editform->is_cancelled()) {
     }
 
     // Redirect user to newly created/updated course.
-    redirect(new moodle_url('/local/template_course/view.php', array('id' => $course->id)));
+    redirect(new moodle_url('/local/template_course/view.php', 
+            array('id' => $course->id, 'edit' => 'on', 'sesskey' => $USER->sesskey)));
 }
 
 // Print the form.
