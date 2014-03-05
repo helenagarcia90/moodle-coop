@@ -74,22 +74,8 @@ class template_course_edit_form extends moodleform {
         $mform->setType('category', PARAM_INT);
         $mform->setDefault('category', $category->id);
 
-        //$choices = array();
-        //$choices['0'] = get_string('hide');
-        //$choices['1'] = get_string('show');
         $mform->addElement('hidden', 'visible', $courseconfig->hidden);
 
-      /*  if (!empty($course->id)) {
-            if (!has_capability('moodle/course:visibility', $coursecontext)) {
-                $mform->hardFreeze('visible');
-                $mform->setConstant('visible', $course->visible);
-            }
-        } else {
-            if (!guess_if_creator_will_have_course_capability('moodle/course:visibility', $categorycontext)) {
-                $mform->hardFreeze('visible');
-                $mform->setConstant('visible', $courseconfig->visible);
-            }
-        }*/
         
         //DATA = PERIODEEEEEE
         $mform->addElement('duration', 'startdate', 'Course duration');
@@ -142,136 +128,51 @@ class template_course_edit_form extends moodleform {
             }
         }
 
-        $mform->addElement('select', 'format', get_string('format'), $formcourseformats);
-        $mform->addHelpButton('format', 'format');
-        $mform->setDefault('format', $courseconfig->format);
+        $mform->addElement('hidden', 'format', 'topics');
 
         // Button to update format-specific options on format change (will be hidden by JavaScript).
-        $mform->registerNoSubmitButton('updatecourseformat');
-        $mform->addElement('submit', 'updatecourseformat', get_string('courseformatudpate'));
+        //$mform->registerNoSubmitButton('updatecourseformat');
+        //$mform->addElement('submit', 'updatecourseformat', get_string('courseformatudpate'));
 
         // Just a placeholder for the course format options.
-        $mform->addElement('hidden', 'addcourseformatoptionshere');
+        $mform->addElement('hidden', 'addcourseformatoptionshere', 'numsections=>0');
         $mform->setType('addcourseformatoptionshere', PARAM_BOOL);
 
         // Appearance.
-        $mform->addElement('header', 'appearancehdr', get_string('appearance'));
-
-        if (!empty($CFG->allowcoursethemes)) {
-            $themeobjects = get_list_of_themes();
-            $themes=array();
-            $themes[''] = get_string('forceno');
-            foreach ($themeobjects as $key=>$theme) {
-                if (empty($theme->hidefromselector)) {
-                    $themes[$key] = get_string('pluginname', 'theme_'.$theme->name);
-                }
-            }
-            $mform->addElement('select', 'theme', get_string('forcetheme'), $themes);
-        }
-
-        $languages=array();
-        $languages[''] = get_string('forceno');
-        $languages += get_string_manager()->get_list_of_translations();
-        $mform->addElement('select', 'lang', get_string('forcelanguage'), $languages);
-        $mform->setDefault('lang', $courseconfig->lang);
-
-        // Multi-Calendar Support - see MDL-18375.
-        $calendartypes = \core_calendar\type_factory::get_list_of_calendar_types();
-        // We do not want to show this option unless there is more than one calendar type to display.
-        if (count($calendartypes) > 1) {
-            $calendars = array();
-            $calendars[''] = get_string('forceno');
-            $calendars += $calendartypes;
-            $mform->addElement('select', 'calendartype', get_string('forcecalendartype', 'calendar'), $calendars);
-        }
-
-        $options = range(0, 10);
-        $mform->addElement('select', 'newsitems', get_string('newsitemsnumber'), $options);
-        $mform->addHelpButton('newsitems', 'newsitemsnumber');
-        $mform->setDefault('newsitems', $courseconfig->newsitems);
-
-        $mform->addElement('selectyesno', 'showgrades', get_string('showgrades'));
-        $mform->addHelpButton('showgrades', 'showgrades');
-        $mform->setDefault('showgrades', $courseconfig->showgrades);
-
-        $mform->addElement('selectyesno', 'showreports', get_string('showreports'));
-        $mform->addHelpButton('showreports', 'showreports');
-        $mform->setDefault('showreports', $courseconfig->showreports);
+        //$mform->addElement('header', 'appearancehdr', get_string('appearance'));
+        $mform->addElement('hidden', 'lang', $courseconfig->lang);
+        $mform->addElement('hidden', 'newsitems', 0);
+        $mform->addElement('hidden', 'showgrades', 1);
+        $mform->addElement('hidden', 'showreports', 1);
 
         // Files and uploads.
-        $mform->addElement('header', 'filehdr', get_string('filesanduploads'));
+        //$mform->addElement('header', 'filehdr', get_string('filesanduploads'));
+        $mform->addElement('hidden', 'legacyfiles', 0);
+        $mform->addElement('hidden', 'maxbytes', 0);
 
-        if (!empty($course->legacyfiles) or !empty($CFG->legacyfilesinnewcourses)) {
-            if (empty($course->legacyfiles)) {
-                //0 or missing means no legacy files ever used in this course - new course or nobody turned on legacy files yet
-                $choices = array('0'=>get_string('no'), '2'=>get_string('yes'));
-            } else {
-                $choices = array('1'=>get_string('no'), '2'=>get_string('yes'));
-            }
-            $mform->addElement('select', 'legacyfiles', get_string('courselegacyfiles'), $choices);
-            $mform->addHelpButton('legacyfiles', 'courselegacyfiles');
-            if (!isset($courseconfig->legacyfiles)) {
-                // in case this was not initialised properly due to switching of $CFG->legacyfilesinnewcourses
-                $courseconfig->legacyfiles = 0;
-            }
-            $mform->setDefault('legacyfiles', $courseconfig->legacyfiles);
-        }
-
-        // Handle non-existing $course->maxbytes on course creation.
-        $coursemaxbytes = !isset($course->maxbytes) ? null : $course->maxbytes;
-
-        // Let's prepare the maxbytes popup.
-        $choices = get_max_upload_sizes($CFG->maxbytes, 0, 0, $coursemaxbytes);
-        $mform->addElement('select', 'maxbytes', get_string('maximumupload'), $choices);
-        $mform->addHelpButton('maxbytes', 'maximumupload');
-        $mform->setDefault('maxbytes', $courseconfig->maxbytes);
-
-        // Completion tracking.
-        if (completion_info::is_enabled_for_site()) {
-            $mform->addElement('header', 'completionhdr', get_string('completion', 'completion'));
-            $mform->addElement('selectyesno', 'enablecompletion', get_string('enablecompletion', 'completion'));
-            $mform->setDefault('enablecompletion', $courseconfig->enablecompletion);
-            $mform->addHelpButton('enablecompletion', 'enablecompletion', 'completion');
-        } else {
-            $mform->addElement('hidden', 'enablecompletion');
-            $mform->setType('enablecompletion', PARAM_INT);
-            $mform->setDefault('enablecompletion', 0);
-        }
+        //$mform->addElement('header', 'completionhdr', get_string('completion', 'completion'));
+        $mform->addElement('hidden', 'enablecompletion', 0);
 
         enrol_course_edit_form($mform, $course, $context);
 
-        $mform->addElement('header','groups', get_string('groupsettingsheader', 'group'));
+        //$mform->addElement('header','groups', get_string('groupsettingsheader', 'group'));
+        $mform->addElement('hidden', 'groupmode', 0);
+        $mform->addElement('hidden', 'groupmodeforce', 0);        //default groupings selector
+        $mform->addElement('hidden', 'defaultgroupingid', 0);
 
-        $choices = array();
-        $choices[NOGROUPS] = get_string('groupsnone', 'group');
-        $choices[SEPARATEGROUPS] = get_string('groupsseparate', 'group');
-        $choices[VISIBLEGROUPS] = get_string('groupsvisible', 'group');
-        $mform->addElement('select', 'groupmode', get_string('groupmode', 'group'), $choices);
-        $mform->addHelpButton('groupmode', 'groupmode', 'group');
-        $mform->setDefault('groupmode', $courseconfig->groupmode);
-
-        $mform->addElement('selectyesno', 'groupmodeforce', get_string('groupmodeforce', 'group'));
-        $mform->addHelpButton('groupmodeforce', 'groupmodeforce', 'group');
-        $mform->setDefault('groupmodeforce', $courseconfig->groupmodeforce);
-
-        //default groupings selector
-        $options = array();
-        $options[0] = get_string('none');
-        $mform->addElement('select', 'defaultgroupingid', get_string('defaultgrouping', 'group'), $options);
-
-        // Customizable role names in this course.
-        $mform->addElement('header','rolerenaming', get_string('rolerenaming'));
-        $mform->addHelpButton('rolerenaming', 'rolerenaming');
+        // ROLES
+        //$mform->addElement('header','rolerenaming', get_string('rolerenaming'));
+        //$mform->addHelpButton('rolerenaming', 'rolerenaming');
 
         if ($roles = get_all_roles()) {
             $roles = role_fix_names($roles, null, ROLENAME_ORIGINAL);
-            $assignableroles = get_roles_for_contextlevels(CONTEXT_COURSE);
             foreach ($roles as $role) {
-                $mform->addElement('text', 'role_'.$role->id, get_string('yourwordforx', '', $role->localname));
+                $mform->addElement('hidden', 'role_'.$role->id, "");
                 $mform->setType('role_'.$role->id, PARAM_TEXT);
             }
         }
-
+        
+        //FINAL
         $this->add_action_buttons();
 
         $mform->addElement('hidden', 'id', null);

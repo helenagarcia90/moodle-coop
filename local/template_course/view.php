@@ -44,7 +44,7 @@
         $urlparams['section'] = $section;
     }
 
-    $PAGE->set_url('/course/view.php', $urlparams); // Defined here to avoid notices on errors etc
+    $PAGE->set_url('/local/template_course/view.php', $urlparams); // Defined here to avoid notices on errors etc
 
     // Prevent caching of this page to stop confusion when changing page after making AJAX changes
     $PAGE->set_cacheable(false);

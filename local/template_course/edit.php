@@ -29,7 +29,7 @@ require_once('edit_form.php');
 global $SITE;
 
 $id = optional_param('id', 0, PARAM_INT); // Course id.
-$categoryid = 1; // Course category = template category
+$categoryid = -1; // Course category = template category
 $returnto = optional_param('returnto', 0, PARAM_ALPHANUM); // Generic navigation return page switch.
 
 $PAGE->set_pagelayout('admin');
@@ -58,7 +58,7 @@ if ($id) {
     $coursecontext = context_course::instance($course->id);
     require_capability('moodle/course:update', $coursecontext);
 
-} else if ($categoryid == 1) { //REVISAR PERMISOS!!!!!
+} else if ($categoryid == -1) { //REVISAR PERMISOS!!!!!
     // Creating new template course.
     print "categoria 1!!!!";
     $course = null;

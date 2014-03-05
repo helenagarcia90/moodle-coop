@@ -81,6 +81,7 @@ class renderer_base {
         $this->opencontainers = $page->opencontainers;
         $this->page = $page;
         $this->target = $target;
+        //var_dump($target);
     }
 
     /**
