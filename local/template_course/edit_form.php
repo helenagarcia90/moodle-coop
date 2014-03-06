@@ -129,21 +129,10 @@ class template_course_edit_form extends moodleform {
      */
     function definition_after_data() {
         global $DB;
-
+        
+        print 'after data!!';
+        
         $mform = $this->_form;
-
-        // add available groupings
-        if ($courseid = $mform->getElementValue('id') and $mform->elementExists('defaultgroupingid')) {
-            $options = array();
-            if ($groupings = $DB->get_records('groupings', array('courseid'=>$courseid))) {
-                foreach ($groupings as $grouping) {
-                    $options[$grouping->id] = format_string($grouping->name);
-                }
-            }
-            core_collator::asort($options);
-            $gr_el =& $mform->getElement('defaultgroupingid');
-            $gr_el->load($options);
-        }
 
         // add course format options
         $formatvalue = $mform->getElementValue('format');
@@ -179,13 +168,13 @@ class template_course_edit_form extends moodleform {
         }
 
         // Add field validation check for duplicate idnumber.
-        if (!empty($data['idnumber']) && (empty($data['id']) || $this->course->idnumber != $data['idnumber'])) {
+        /*if (!empty($data['idnumber']) && (empty($data['id']) || $this->course->idnumber != $data['idnumber'])) {
             if ($course = $DB->get_record('course', array('idnumber' => $data['idnumber']), '*', IGNORE_MULTIPLE)) {
                 if (empty($data['id']) || $course->id != $data['id']) {
                     $errors['idnumber'] = get_string('courseidnumbertaken', 'error', $course->fullname);
                 }
             }
-        }
+        }*/
 
         $errors = array_merge($errors, enrol_course_edit_validation($data, $this->context));
 

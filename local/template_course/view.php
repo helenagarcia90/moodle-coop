@@ -58,6 +58,8 @@
     }
 
     require_login($course);
+    
+    global $USER;
 
     // Switchrole - sanity check in cost-order...
     $reset_user_allowed_editing = false;
@@ -79,18 +81,6 @@
         $USER->editing = 0;
         $reset_user_allowed_editing = true;
     }
-
-    //If course is hosted on an external server, redirect to corresponding
-    //url with appropriate authentication attached as parameter
-    if (file_exists($CFG->dirroot .'/course/externservercourse.php')) {
-        include $CFG->dirroot .'/course/externservercourse.php';
-        if (function_exists('extern_server_course')) {
-            if ($extern_url = extern_server_course($course)) {
-                redirect($extern_url);
-            }
-        }
-    }
-
 
     require_once($CFG->dirroot.'/calendar/lib.php');    /// This is after login because it needs $USER
 
@@ -234,11 +224,11 @@
     // We are currently keeping the button here from 1.x to help new teachers figure out
     // what to do, even though the link also appears in the course admin block.  It also
     // means you can back out of a situation where you removed the admin block. :)
-    if ($PAGE->user_allowed_editing()) {
-        $buttons = $OUTPUT->edit_button($PAGE->url);
+    /*if ($PAGE->user_allowed_editing()) {
+        $buttons = $OUTPUT->edit_button($PAGE->url); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $PAGE->set_button($buttons);
-    }
-
+    }*/
+    
     $PAGE->set_title(get_string('course') . ': ' . $course->fullname);
     // If viewing a section, make the title more specific
     if ($section and $section > 0 and course_format_uses_sections($course->format)) {
@@ -285,12 +275,23 @@
     $displaysection = $section;
 
     // Include the actual course format.
-    require($CFG->dirroot .'/course/format/'. $course->format .'/format.php');
-    // Content wrapper end.
+    require($CFG->dirroot .'/course/format/'. $course->format .'/format.php');   
 
+    // Content wrapper end.
     echo html_writer::end_tag('div');
 
     // Include course AJAX
     include_course_ajax($course, $modnamesused);
+    
+    //Boto per editar la template
+    /*$form = new html_form();
+    $form->url = new moodle_url('/local/template_course/edit.php', 
+            array('id' => $course->id, 'edit' => 'on', 'sesskey' => $USER->sesskey));
+    $form->button = new html_button();
+    $form->button->text = 'Edit Template';
+    echo $OUTPUT->button($form);*/
+    
+    echo $OUTPUT->continue_button(new moodle_url('/local/template_course/edit.php', 
+            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => $USER->sesskey)));
 
     echo $OUTPUT->footer();

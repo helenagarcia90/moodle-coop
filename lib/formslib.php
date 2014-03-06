@@ -497,6 +497,7 @@ abstract class moodleform {
      * @return bool true if form data valid
      */
     function is_validated() {
+        print 'plorare';
         //finalize the form definition before any processing
         if (!$this->_definition_finalized) {
             $this->_definition_finalized = true;
@@ -605,7 +606,7 @@ abstract class moodleform {
         print '1' + $this->is_cancelled();
         print '1' + $this->is_submitted();
         print '1' + $this->is_validated();
-        
+        print 'caca';
         if (!$this->is_cancelled() and $this->is_submitted() and $this->is_validated()) {
             $data = $mform->exportValues();
             unset($data['sesskey']); // we do not need to return sesskey
@@ -616,6 +617,7 @@ abstract class moodleform {
                 return (object)$data;
             }
         } else {
+            print 'null';
             return NULL;
         }
     }

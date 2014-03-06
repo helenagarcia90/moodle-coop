@@ -43,8 +43,8 @@ $PAGE->set_url('/local/template_course/edit.php', $pageparams);
 
 // Basic access control checks.
 if ($id) {
-    // Editing course.
-    print "curs: " + $id;
+    // Editing course
+    print "curs: " . $id;
     if ($id == SITEID){
         // Don't allow editing of  'site course' using this from.
         print_error('cannoteditsiteform');
@@ -89,10 +89,10 @@ if (!empty($course)) {
     }
 
     // Inject current aliases.
-    $aliases = $DB->get_records('role_names', array('contextid'=>$coursecontext->id));
-    foreach($aliases as $alias) {
-        $course->{'role_'.$alias->roleid} = $alias->name;
-    }
+    //$aliases = $DB->get_records('role_names', array('contextid'=>$coursecontext->id));
+    //foreach($aliases as $alias) {
+        //$course->{'role_'.$alias->roleid} = $alias->name;
+    //}
 
 } else {
     // Editor should respect category context if course context is not set.
@@ -109,11 +109,11 @@ if (!empty($course)) {
 
 // First create the form.
 $editform = new template_course_edit_form(NULL, array('course'=>$course, 'category'=>$category, 'editoroptions'=>$editoroptions, 'returnto'=>$returnto));
-print 
-$category->id;
+print $category->id;
 print 'bbb';
 
 if ($editform->is_cancelled()) {
+        print 'canceled';
         switch ($returnto) {
             case 'category':
                 $url = new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid' => $categoryid));
@@ -139,6 +139,7 @@ if ($editform->is_cancelled()) {
 
 } else if ($data = $editform->get_data()) { //retorna NULL si no esta cancelat, si esta submit i si esta ben validat
     // Process data if submitted.
+    print 'elseif';
     if (empty($course->id)) {
         // In creating the course.
         print '<br/>ARRIBO!!!!!!!!!!!!!';
@@ -184,6 +185,7 @@ if ($editform->is_cancelled()) {
 print 'imprimeixo el formulari';
 
 $site = get_site();
+print 'ddd';
 
 $streditcoursesettings = get_string("edittemplatecoursesettings");
 $straddnewcourse = get_string("addnewtemplatecourse");
@@ -191,9 +193,10 @@ $stradministration = get_string("administration");
 $strcategories = get_string("categories");
 
 if (!empty($course->id)) {
-    $PAGE->navbar->add($streditcoursesettings);
-    $title = $streditcoursesettings;
+    //$PAGE->navbar->add($streditcoursesettings);
+    $title = "disj"; //$streditcoursesettings;
     $fullname = $course->fullname;
+    print "ccc";
 } else {
     $PAGE->navbar->add($stradministration, new moodle_url('/admin/index.php'));
     //$PAGE->navbar->add($strcategories, new moodle_url('/course/index.php'));
