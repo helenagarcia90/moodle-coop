@@ -18,7 +18,7 @@
  * EDIT TEMPLATE COURSE
  *
  * @package    core_course
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @copyright  2014 Helena Garcia
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -145,29 +145,6 @@ if ($editform->is_cancelled()) {
         print '<br/>ARRIBO!!!!!!!!!!!!!';
         var_dump($data);
         $course = create_course($data, $editoroptions);
-        
-        
-    /* AL LORO: NO VOLEM USUARIS ADJUNTS  
-        // Get the context of the newly created course. 
-        $context = context_course::instance($course->id, MUST_EXIST);
-
-        if (!empty($CFG->creatornewroleid) and !is_viewing($context, NULL, 'moodle/role:assign') and !is_enrolled($context, NULL, 'moodle/role:assign')) {
-            // Deal with course creators - enrol them internally with default role.
-            enrol_try_internal_enrol($course->id, $USER->id, $CFG->creatornewroleid);
-        }
-        if (!is_enrolled($context)) {
-            // Redirect to manual enrolment page if possible.
-            $instances = enrol_get_instances($course->id, true);
-            foreach($instances as $instance) {
-                if ($plugin = enrol_get_plugin($instance->enrol)) {
-                    if ($plugin->get_manual_enrol_link($instance)) {
-                        // We know that the ajax enrol UI will have an option to enrol.
-                        redirect(new moodle_url('/enrol/users.php', array('id'=>$course->id)));
-                    }
-                }
-            }
-        }
-    */
         
     } else {
         // Save any changes to the files used in the editor.
