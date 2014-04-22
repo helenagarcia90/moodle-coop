@@ -258,7 +258,7 @@
     echo html_writer::start_tag('div', array('class'=>'course-content'));
 
     // make sure that section 0 exists (this function will create one if it is missing)
-    course_create_sections_if_missing($course, 0);
+    //course_create_sections_if_missing($course, 0);
 
     // get information about course modules and existing module types
     // format.php in course formats may rely on presence of these variables
@@ -291,7 +291,7 @@
     $form->button->text = 'Edit Template';
     echo $OUTPUT->button($form);*/
     
-    echo $OUTPUT->continue_button(new moodle_url('/local/template_course/edit.php', 
-            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => $USER->sesskey)));
+    echo $OUTPUT->single_button(new moodle_url('/local/template_course/edit.php', 
+            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => $USER->sesskey)), 'edit', 'get');
 
     echo $OUTPUT->footer();

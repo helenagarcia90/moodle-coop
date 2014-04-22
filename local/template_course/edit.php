@@ -44,7 +44,7 @@ $PAGE->set_url('/local/template_course/edit.php', $pageparams);
 // Basic access control checks.
 if ($id) {
     // Editing course
-    print "curs: " . $id;
+    //print "curs: " . $id;
     if ($id == SITEID){
         // Don't allow editing of  'site course' using this from.
         print_error('cannoteditsiteform');
@@ -60,7 +60,7 @@ if ($id) {
 
 } else if ($categoryid == -1) { //REVISAR PERMISOS!!!!!
     // Creating new template course.
-    print "categoria 1!!!!";
+    //print "categoria 1!!!!";
     $course = null;
     require_login();
     $category = $DB->get_record('course_categories', array('id'=>$categoryid), '*', MUST_EXIST);
@@ -96,12 +96,12 @@ if (!empty($course)) {
 
 } else {
     // Editor should respect category context if course context is not set.
-    print 'curs buit';
+   // print 'curs buit';
     $editoroptions['context'] = $catcontext;
     $editoroptions['subdirs'] = 0;
     $course = file_prepare_standard_editor($course, 'summary', $editoroptions, null, 'course', 'summary', null);
-    print 'aaa';
-    var_dump($course);
+    //print 'aaa';
+    //var_dump($course);
     if ($overviewfilesoptions) {
         file_prepare_standard_filemanager($course, 'overviewfiles', $overviewfilesoptions, null, 'course', 'overviewfiles', 0);
     }
@@ -109,11 +109,11 @@ if (!empty($course)) {
 
 // First create the form.
 $editform = new template_course_edit_form(NULL, array('course'=>$course, 'category'=>$category, 'editoroptions'=>$editoroptions, 'returnto'=>$returnto));
-print $category->id;
-print 'bbb';
+//print $category->id;
+//print 'bbb';
 
 if ($editform->is_cancelled()) {
-        print 'canceled';
+        //print 'canceled';
         switch ($returnto) {
             case 'category':
                 $url = new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid' => $categoryid));
@@ -139,16 +139,16 @@ if ($editform->is_cancelled()) {
 
 } else if ($data = $editform->get_data()) { //retorna NULL si no esta cancelat, si esta submit i si esta ben validat
     // Process data if submitted.
-    print 'elseif';
+    //print 'elseif';
     if (empty($course->id)) {
         // In creating the course.
-        print '<br/>ARRIBO!!!!!!!!!!!!!';
+        //print '<br/>ARRIBO!!!!!!!!!!!!!';
         var_dump($data);
         $course = create_course($data, $editoroptions);
         
     } else {
         // Save any changes to the files used in the editor.
-        print 'update';
+        //print 'update';
         update_course($data, $editoroptions);
     }
 
@@ -159,21 +159,21 @@ if ($editform->is_cancelled()) {
 
 // Print the form.
 
-print 'imprimeixo el formulari';
+//print 'imprimeixo el formulari';
 
 $site = get_site();
-print 'ddd';
+//print 'ddd';
 
-$streditcoursesettings = get_string("edittemplatecoursesettings");
+$streditcoursesettings = "Template Course Settings";//get_string("edittemplatecoursesettings");
 $straddnewcourse = get_string("addnewtemplatecourse");
 $stradministration = get_string("administration");
 $strcategories = get_string("categories");
 
 if (!empty($course->id)) {
     //$PAGE->navbar->add($streditcoursesettings);
-    $title = "disj"; //$streditcoursesettings;
+    $title = $streditcoursesettings;
     $fullname = $course->fullname;
-    print "ccc";
+    //print "ccc";
 } else {
     $PAGE->navbar->add($stradministration, new moodle_url('/admin/index.php'));
     //$PAGE->navbar->add($strcategories, new moodle_url('/course/index.php'));

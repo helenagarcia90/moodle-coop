@@ -157,6 +157,7 @@ abstract class moodleform {
      * @param bool $editable
      */
     function moodleform($action=null, $customdata=null, $method='post', $target='', $attributes=null, $editable=true) {
+        echo 'moodle';
         global $CFG, $FULLME;
         // no standard mform in moodle should allow autocomplete with the exception of user signup
         if (empty($attributes)) {
@@ -476,10 +477,11 @@ abstract class moodleform {
         $mform =& $this->_form;
         $nosubmit = false;
         if (!$this->is_submitted()){
-            print 'hellow';
+           // print 'hellow';
             return false;
         }
-        var_dump($mform->_noSubmitButtons);
+        //print 'adieu';
+        //var_dump($mform->_noSubmitButtons);
         foreach ($mform->_noSubmitButtons as $nosubmitbutton){
             if (optional_param($nosubmitbutton, 0, PARAM_RAW)){
                 $nosubmit = true;
@@ -497,13 +499,12 @@ abstract class moodleform {
      * @return bool true if form data valid
      */
     function is_validated() {
-        print 'plorare';
         //finalize the form definition before any processing
         if (!$this->_definition_finalized) {
             $this->_definition_finalized = true;
             $this->definition_after_data();
         }
-
+        echo ' is validated ';
         return $this->validate_defined_fields();
     }
 
@@ -528,19 +529,20 @@ abstract class moodleform {
     function validate_defined_fields($validateonnosubmit=false) {
         static $validated = null; // one validation is enough
         $mform =& $this->_form;
-        print '50'+$this->no_submit_button_pressed();
+        //print '50'+$this->no_submit_button_pressed();
         if ($this->no_submit_button_pressed() && empty($validateonnosubmit)){
-            print 'patata';
+            //print 'patata';
             return false;
         } elseif ($validated === null) {
+            //print 'no validat';
             $internal_val = $mform->validate();
-
+            //print 'aijdsas';
             $files = array();
             $file_val = $this->_validate_files($files);
             //check draft files for validation and flag them if required files
             //are not in draft area.
             $draftfilevalue = $this->validate_draft_files();
-
+            //print '333';
             if ($file_val !== true && $draftfilevalue !== true) {
                 $file_val = array_merge($file_val, $draftfilevalue);
             } else if ($draftfilevalue !== true) {
@@ -555,9 +557,11 @@ abstract class moodleform {
                 }
                 $file_val = false;
             }
-
+            //print '444';
             $data = $mform->exportValues();
+            //print '555';
             $moodle_val = $this->validation($data, $files);
+            //print '666';
             if ((is_array($moodle_val) && count($moodle_val)!==0)) {
                 // non-empty array means errors
                 foreach ($moodle_val as $element=>$msg) {
@@ -602,13 +606,11 @@ abstract class moodleform {
      */
     function get_data() {
         $mform =& $this->_form;
-        print 'validacions';
-        print '1' + $this->is_cancelled();
-        print '1' + $this->is_submitted();
-        print '1' + $this->is_validated();
-        print 'caca';
         if (!$this->is_cancelled() and $this->is_submitted() and $this->is_validated()) {
+            //print 'get data';
+            
             $data = $mform->exportValues();
+            
             unset($data['sesskey']); // we do not need to return sesskey
             unset($data['_qf__'.$this->_formname]);   // we do not need the submission marker too
             if (empty($data)) {
@@ -617,7 +619,6 @@ abstract class moodleform {
                 return (object)$data;
             }
         } else {
-            print 'null';
             return NULL;
         }
     }
