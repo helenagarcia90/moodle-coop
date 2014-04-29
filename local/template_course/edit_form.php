@@ -64,24 +64,14 @@ class template_course_edit_form extends moodleform {
             $mform->setConstant('fullname', $course->fullname);
         }
         
-        // shortname
-        $mform->addElement('text', 'shortname', get_string('shortnamecourse'), 'maxlength="100" size="20"');
-        $mform->addHelpButton('shortname', 'shortnamecourse');
-        $mform->addRule('shortname', get_string('missingshortname'), 'required', null, 'client');
-        $mform->setType('shortname', PARAM_TEXT);
-        if (!empty($course->id) and !has_capability('moodle/course:changeshortname', $coursecontext)) {
-            $mform->hardFreeze('shortname');
-            $mform->setConstant('shortname', $course->shortname);
-        }
-        
         // Categoria Template
         $mform->addElement('hidden', 'category', $category->id);
         $mform->setType('category', PARAM_INT);
         $mform->setDefault('category', $category->id);        
         
         //DATA = PERIODE
-        $mform->addElement('duration', 'startdate', 'Course duration');
-        $mform->setDefault('startdate', + 3600 * 24);       
+        $mform->addElement('text', 'idnumber', 'Semaines de duration du sujet');
+        $mform->setDefault('idnumber', 8);       
 
         // Description.
         $mform->addElement('header', 'descriptionhdr', get_string('description'));
@@ -91,6 +81,7 @@ class template_course_edit_form extends moodleform {
         $mform->setType('summary_editor', PARAM_RAW);
         
         // Elements amagats, assignem valors per defecte
+        //$mform->addElement('hidden', 'shortname', '007');
         $mform->addElement('hidden','idnumber', "");
         $mform->addElement('hidden', 'visible', $courseconfig->hidden);
         $mform->addElement('hidden', 'overviewfiles_filemanager', 0);
@@ -119,21 +110,17 @@ class template_course_edit_form extends moodleform {
         // FINAL. Assignem les dades
         
         $this->add_action_buttons();
-        $mform->addElement('hidden', 'id', null);
-        $mform->setType('id', PARAM_INT);
+        //$mform->addElement('hidden', 'id', null);
+        //$mform->setType('id', PARAM_INT);
         $this->set_data($course);
     }
         
     /**
      * Fill in the current page data for this course.
      */
-    function definition_after_data() {
-        global $DB;
-        
-        //print 'after data!!';
-        
+    function definition_after_data() {               
         $mform = $this->_form;
-
+        
         // add course format options
         $formatvalue = $mform->getElementValue('format');
         if (is_array($formatvalue) && !empty($formatvalue)) {
@@ -166,7 +153,6 @@ class template_course_edit_form extends moodleform {
                 $errors['shortname'] = get_string('shortnametaken', '', $course->fullname);
             }
         }
-
         // Add field validation check for duplicate idnumber.
         /*if (!empty($data['idnumber']) && (empty($data['id']) || $this->course->idnumber != $data['idnumber'])) {
             if ($course = $DB->get_record('course', array('idnumber' => $data['idnumber']), '*', IGNORE_MULTIPLE)) {
@@ -175,17 +161,13 @@ class template_course_edit_form extends moodleform {
                 }
             }
         }*/
-
         $errors = array_merge($errors, enrol_course_edit_validation($data, $this->context));
 
         $courseformat = course_get_format((object)array('format' => $data['format']));
         $formaterrors = $courseformat->edit_form_validation($data, $files, $errors);
         if (!empty($formaterrors) && is_array($formaterrors)) {
             $errors = array_merge($errors, $formaterrors);
-        }
-        //print '<br/>ERRORS: <br/>';
-        //var_dump($errors);
-        
+        }       
         return $errors;
     }
 }
@@ -203,19 +185,24 @@ class instance_course_edit_form extends moodleform {
         global $CFG, $PAGE;
 
         $mform = $this->_form;
-        //$PAGE->requires->yui_module('moodle-course-formatchooser', 'M.course.init_formatchooser',
-                //array(array('formid' => $mform->getAttribute('id'))));
-        //echo '04';
+        $PAGE->requires->yui_module('moodle-course-formatchooser', 'M.course.init_formatchooser',
+                array(array('formid' => $mform->getAttribute('id'))));
+
         // recollim elements per configurar el formulari
+        //var_dump($this->_customdata);
         $course        = $this->_customdata['course']; // this contains the data of this form
-        $category      = $this->_customdata['category'];
-        $editoroptions = $this->_customdata['editoroptions'];
-        $returnto = $this->_customdata['returnto'];
-        
-        $courseconfig = get_config('moodlecourse');
+        $categorycontext = context_coursecat::instance(-1); //template
+
+        if (!empty($course->id)) {
+            $coursecontext = context_course::instance($course->id);
+            $context = $coursecontext;
+        } else {
+            $coursecontext = null;
+            $context = $categorycontext;
+        }
         $this->course  = $course;
-        $this->context = null;
-        //echo '05';
+        $this->context = $context;
+        
         // Form definition ---------------------------------
         
         $mform->addElement('header','instance', get_string('general', 'form'));
@@ -228,40 +215,53 @@ class instance_course_edit_form extends moodleform {
             $mform->hardFreeze('fullname');
             $mform->setConstant('fullname', $course->fullname);
         }
+        $mform->setDefault('fullname', $course->fullname . date('YY'));
 
-        $mform->addElement('text', 'shortname', get_string('shortnamecourse'), 'maxlength="100" size="20"');
-        $mform->addHelpButton('shortname', 'shortnamecourse');
-        $mform->addRule('shortname', get_string('missingshortname'), 'required', null, 'client');
-        $mform->setType('shortname', PARAM_TEXT);
-        if (!empty($course->id) and !has_capability('moodle/course:changeshortname', $coursecontext)) {
-            $mform->hardFreeze('shortname');
-            $mform->setConstant('shortname', $course->shortname);
-        }
+        //short name
+        $mform->addElement('hidden', 'shortname', get_string('shortnamecourse'));
 
         //category
-        $displaylist = coursecat::make_categories_list('moodle/course:create');
-        $mform->addElement('select', 'category', get_string('coursecategory'), $displaylist);
-        $mform->addHelpButton('category', 'coursecategory');
-        $mform->setDefault('category', $category->id);
+        $mform->addElement('hidden', 'category', 1);
         
         //start date
         $mform->addElement('date_selector', 'startdate', get_string('startdate'));
         $mform->addHelpButton('startdate', 'startdate');
-        $mform->setDefault('startdate', time() + 3600 * 24);
+        $mform->setDefault('startdate', time());
         
-        //calendari de setmanes no lectives
-        $mform->addElement('date_selector', 'nolectiveweek', 'No lective weeks');
-        $mform->setDefault('nolectiveweek', time() + 3600 * 24);
+        //end date proposada
+        $mform->addElement('date_selector', 'enddate', 'Date de finalisation');
+        $mform->setDefault('enddate', time()+$course->idnumber*7*24*3600);
 
-        //$mform->addElement('hidden', 'visible', 1);
+        $mform->addElement('hidden', 'visible', 1);
         
         $this->add_action_buttons();
-        //$mform->addElement('hidden', 'id', null);
-        //$mform->setType('id', PARAM_INT);
+        $mform->addElement('hidden', 'id', $course->id);
+        $mform->setType('id', PARAM_INT);
         $this->set_data($course);
     }
     
-    /*function validation() {
+    function definition_after_data() {
+        /*global $DB;
+        
+        //print 'after data!!';
+        
+        $mform = $this->_form;
+
+        // add course format options
+        $formatvalue = $mform->getElementValue('format');
+        if (is_array($formatvalue) && !empty($formatvalue)) {
+            $courseformat = course_get_format((object)array('format' => $formatvalue[0]));
+
+            $elements = $courseformat->create_edit_form_elements($mform);
+            //var_dump($elements);
+            for ($i = 0; $i < count($elements); $i++) {
+                $mform->insertElementBefore($mform->removeElement($elements[$i]->getName(), false),
+                        'addcourseformatoptionshere');
+            }
+        }*/
+    }
+    
+    function validation($data, $files) {
      
      ///////////considerar posar shortname = name i  mirar tema calendari
      
@@ -273,7 +273,7 @@ class instance_course_edit_form extends moodleform {
             $errors = array_merge($errors, $formaterrors);
         }
         
-    }*/
+    }
     
 }
 

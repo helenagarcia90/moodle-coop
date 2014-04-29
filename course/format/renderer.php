@@ -705,16 +705,14 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
      */
     public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
         global $PAGE;
-
+        
         $modinfo = get_fast_modinfo($course);
         $course = course_get_format($course)->get_course();
-
         $context = context_course::instance($course->id);
         // Title with completion help icon.
         $completioninfo = new completion_info($course);
         echo $completioninfo->display_help_icon();
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
-
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
 
@@ -730,10 +728,6 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
                     echo $this->section_footer();
                 }
-                continue;
-            }
-            if ($section > $course->numsections) {
-                // activities inside this section are 'orphaned', this section will be printed as 'stealth' below
                 continue;
             }
             // Show the section if the user is permitted to access it, OR if it's not available

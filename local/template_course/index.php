@@ -13,14 +13,13 @@
         //LOGIN
         require_login();
         
-        //require_once($CFG->dirroot.'/calendar/lib.php');    /// This is after login because it needs $USER
+        require_once($CFG->dirroot.'/calendar/lib.php');    /// This is after login because it needs $USER
         
         //CATEGORIA
         $categoryid = -1; // Template
         $PAGE->set_category_by_id($categoryid);
         $PAGE->set_url(new moodle_url('/local/template_course/index.php'));
         $PAGE->set_pagetype('course-index-category');
-        // And the object has been loaded for us no need for another DB call
         $category = $PAGE->category;
         
         //RENDERER
@@ -38,16 +37,5 @@
         echo $content;
 
         echo $OUTPUT -> footer();
-
-        
-/*
-        //exemple1
-	/*if ($DB->record_exists('user', array('username' => 'helena.garcia'))){
-	 	print 'helena is an existing username';
-        }
-	else {
-	 	print 'helena is not an existing username';
-	}
- */
  ?>
 

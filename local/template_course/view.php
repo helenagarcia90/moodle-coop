@@ -62,7 +62,7 @@
     global $USER;
 
     // Switchrole - sanity check in cost-order...
-    $reset_user_allowed_editing = false;
+    $reset_user_allowed_editing = true;
     if ($switchrole > 0 && confirm_sesskey() &&
         has_capability('moodle/role:switchroles', $context)) {
         // is this role assignable in this context?
@@ -139,46 +139,27 @@
     if (!isset($USER->editing)) {
         $USER->editing = 0;
     }
-    if ($PAGE->user_allowed_editing()) {
-        if (($edit == 1) and confirm_sesskey()) {
-            $USER->editing = 1;
+    //if ($PAGE->user_allowed_editing()) {
+        if (confirm_sesskey()) {            
+            $USER->editing = 1;        
+            set_user_preference('usemodchooser', $modchooser);
+        } else {
             // Redirect to site root if Editing is toggled on frontpage
             if ($course->id == SITEID) {
                 redirect($CFG->wwwroot .'/?redirect=0');
             } else if (!empty($return)) {
                 redirect($CFG->wwwroot . $return);
             } else {
-                $url = new moodle_url($PAGE->url, array('notifyeditingon' => 1));
+                $url = new moodle_url($PAGE->url, array('notifyeditingon' => 1, 'sesskey' => sesskey()));
                 redirect($url);
             }
-        } else if (($edit == 0) and confirm_sesskey()) {
-            $USER->editing = 0;
-            if(!empty($USER->activitycopy) && $USER->activitycopycourse == $course->id) {
-                $USER->activitycopy       = false;
-                $USER->activitycopycourse = NULL;
-            }
-            // Redirect to site root if Editing is toggled on frontpage
-            if ($course->id == SITEID) {
-                redirect($CFG->wwwroot .'/?redirect=0');
-            } else if (!empty($return)) {
-                redirect($CFG->wwwroot . $return);
-            } else {
-                redirect($PAGE->url);
-            }
-        }
-        if (($modchooser == 1) && confirm_sesskey()) {
-            set_user_preference('usemodchooser', $modchooser);
-        } else if (($modchooser == 0) && confirm_sesskey()) {
-            set_user_preference('usemodchooser', $modchooser);
         }
 
         if (has_capability('moodle/course:sectionvisibility', $context)) {
             if ($hide && confirm_sesskey()) {
                 set_section_visible($course->id, $hide, '0');
                 redirect($PAGE->url);
-            }
-
-            if ($show && confirm_sesskey()) {
+            } else if ($show && confirm_sesskey()) {
                 set_section_visible($course->id, $show, '1');
                 redirect($PAGE->url);
             }
@@ -197,9 +178,9 @@
                 echo $OUTPUT->notification('An error occurred while moving a section');
             }
         }
-    } else {
-        $USER->editing = 0;
-    }
+    //} else {
+        //$USER->editing = 0;
+    //}
 
     $SESSION->fromdiscussion = $PAGE->url->out(false);
 
@@ -258,7 +239,7 @@
     echo html_writer::start_tag('div', array('class'=>'course-content'));
 
     // make sure that section 0 exists (this function will create one if it is missing)
-    //course_create_sections_if_missing($course, 0);
+    course_create_sections_if_missing($course, 0);
 
     // get information about course modules and existing module types
     // format.php in course formats may rely on presence of these variables
@@ -274,24 +255,17 @@
     // inclusion we pass parameters around this way..
     $displaysection = $section;
 
-    // Include the actual course format.
-    require($CFG->dirroot .'/course/format/'. $course->format .'/format.php');   
-
+    // Include the template course format.
+    require('format.php');
+    
     // Content wrapper end.
     echo html_writer::end_tag('div');
 
     // Include course AJAX
     include_course_ajax($course, $modnamesused);
     
-    //Boto per editar la template
-    /*$form = new html_form();
-    $form->url = new moodle_url('/local/template_course/edit.php', 
-            array('id' => $course->id, 'edit' => 'on', 'sesskey' => $USER->sesskey));
-    $form->button = new html_button();
-    $form->button->text = 'Edit Template';
-    echo $OUTPUT->button($form);*/
-    
+    //boto d'editar
     echo $OUTPUT->single_button(new moodle_url('/local/template_course/edit.php', 
-            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => $USER->sesskey)), 'edit', 'get');
+            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => sesskey())), 'Éditer', 'get');
 
     echo $OUTPUT->footer();

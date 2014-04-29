@@ -2471,9 +2471,7 @@ function create_course($data, $editoroptions = NULL) {
     global $DB;
 
     //check the categoryid - must be given for all new courses
-    print 'before';
     $category = $DB->get_record('course_categories', array('id'=>$data->category), '*', MUST_EXIST);
-    print 'after';
     // Check if the shortname already exists.
     if (!empty($data->shortname)) {
         if ($DB->record_exists('course', array('shortname' => $data->shortname))) {

@@ -113,7 +113,7 @@ $editform = new template_course_edit_form(NULL, array('course'=>$course, 'catego
 //print 'bbb';
 
 if ($editform->is_cancelled()) {
-        //print 'canceled';
+        print 'canceled';
         switch ($returnto) {
             case 'category':
                 $url = new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid' => $categoryid));
@@ -129,9 +129,9 @@ if ($editform->is_cancelled()) {
                 break;
             default:
                 if (!empty($course->id)) {
-                    $url = new moodle_url($CFG->wwwroot.'/course/view.php', array('id'=>$course->id));
+                    $url = new moodle_url($CFG->wwwroot.'/local/template_course/view.php', array('id'=>$course->id, 'sesskey' => $USER->sesskey));
                 } else {
-                    $url = new moodle_url($CFG->wwwroot.'/course/');
+                    $url = new moodle_url($CFG->wwwroot.'/local/template_course');
                 }
                 break;
         }
@@ -139,16 +139,14 @@ if ($editform->is_cancelled()) {
 
 } else if ($data = $editform->get_data()) { //retorna NULL si no esta cancelat, si esta submit i si esta ben validat
     // Process data if submitted.
-    //print 'elseif';
+    $data->numsections = $data->idnumber;
+    $data->shortname = $data->fullname;
+    
     if (empty($course->id)) {
-        // In creating the course.
-        //print '<br/>ARRIBO!!!!!!!!!!!!!';
-        var_dump($data);
         $course = create_course($data, $editoroptions);
         
     } else {
         // Save any changes to the files used in the editor.
-        //print 'update';
         update_course($data, $editoroptions);
     }
 
@@ -164,8 +162,8 @@ if ($editform->is_cancelled()) {
 $site = get_site();
 //print 'ddd';
 
-$streditcoursesettings = "Template Course Settings";//get_string("edittemplatecoursesettings");
-$straddnewcourse = get_string("addnewtemplatecourse");
+$streditcoursesettings = "Configuration du nouveau sujet";//get_string("edittemplatecoursesettings");
+$straddnewcourse = "Ajouter nouveau sujet";
 $stradministration = get_string("administration");
 $strcategories = get_string("categories");
 
@@ -181,7 +179,6 @@ if (!empty($course->id)) {
     $title = "$site->shortname: $straddnewcourse";
     $fullname = $site->fullname;
 }
-
 $PAGE->set_title($title);
 $PAGE->set_heading($fullname);
 
@@ -190,6 +187,5 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($streditcoursesettings);
 
 $editform->display();
-
 
 echo $OUTPUT->footer();
