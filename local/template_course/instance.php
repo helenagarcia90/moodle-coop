@@ -74,9 +74,11 @@
             } else if ($data = $editform->get_data()) { //retorna NULL si no esta cancelat, si esta submit i si esta ben validat
                 //afegim les dades del curs plantilla
                 $data->id='';
-                $data->idnumber='';
                 $data->shortname=$data->fullname;
                 $data->category=1;
+                $data->numsections = $data->idnumber;
+                $data->idnumber='';
+                //barregem
                 $data = array_merge((array)$course, (array)$data);                
                 
                 $course = create_course((object)$data, array());
