@@ -76,7 +76,6 @@
                 $data->id='';
                 $data->shortname=$data->fullname;
                 $data->category=1;
-                $data->numsections = $data->idnumber;
                 $data->idnumber='';
                 //barregem
                 $data = array_merge((array)$course, (array)$data);                

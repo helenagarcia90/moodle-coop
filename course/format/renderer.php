@@ -254,6 +254,23 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
                     array('title' => $strshowfromothers, 'class' => 'editing_showhide'));
             }
         }
+        
+        //delete section
+        $hasmanageactivities = has_capability('moodle/course:movesections', $coursecontext);
+        if ($hasmanageactivities) {
+            /*$actions['delete'] = new action_menu_link_secondary(
+                new moodle_url($baseurl, array('delete' => $mod->id)),
+                new pix_icon('t/delete', $str->delete, 'moodle', array('class' => 'iconsmall', 'title' => '')),
+                $str->delete,
+                array('class' => 'editing_delete', 'data-action' => 'delete')
+            );*/
+            $url = clone($baseurl);
+            $url->param('delete',  $section->section);
+            $controls[] = html_writer::link($url,
+                    html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/down'),
+                    'class' => 'delete', 'alt' => $strhidefromothers)),
+                    array('title' => $strhidefromothers, 'class' => 'delete'));
+        }
 
         if (!$onsectionpage && has_capability('moodle/course:movesections', $coursecontext)) {
             $url = clone($baseurl);

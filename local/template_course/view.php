@@ -256,7 +256,7 @@
     $displaysection = $section;
 
     // Include the template course format.
-    require('format.php');
+    require('format/format.php');
     
     // Content wrapper end.
     echo html_writer::end_tag('div');

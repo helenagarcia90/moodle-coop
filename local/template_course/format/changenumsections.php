@@ -25,9 +25,9 @@
  * @since Moodle 2.3
  */
 
-require_once(dirname(__FILE__).'/../../config.php');
+require_once(dirname(__FILE__).'/../../../config.php');
 #require_once($CFG->dirroot.'/course/lib.php');
-require_once('lib.php');
+require_once('../lib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 $increase = optional_param('increase', true, PARAM_BOOL);
@@ -58,7 +58,7 @@ if (isset($courseformatoptions['numsections'])) {
     }
 }
 
-$url = course_get_url($course);
-$url->set_anchor('changenumsections');
+$url = new moodle_url("/local/template_course/view.php", array('id'=> $course->id, 'sesskey' => sesskey()));
+//$url->set_anchor('changenumsections');
 // Redirect to where we were..
 redirect($url);

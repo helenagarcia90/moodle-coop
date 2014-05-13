@@ -70,8 +70,8 @@ class template_course_edit_form extends moodleform {
         $mform->setDefault('category', $category->id);        
         
         //DATA = PERIODE
-        $mform->addElement('text', 'idnumber', 'Semaines de duration du sujet');
-        $mform->setDefault('idnumber', 8);       
+        $mform->addElement('text', 'idnumber', 'Nombre de mati&egrave;res');
+        $mform->setDefault('idnumber', 8); //provisional number of sections       
 
         // Description.
         $mform->addElement('header', 'descriptionhdr', get_string('description'));
@@ -181,7 +181,6 @@ class instance_course_edit_form extends moodleform {
      * Form definition.
      */
     function definition() {
-        //echo '07';
         global $CFG, $PAGE;
 
         $mform = $this->_form;
@@ -189,7 +188,6 @@ class instance_course_edit_form extends moodleform {
                 array(array('formid' => $mform->getAttribute('id'))));
 
         // recollim elements per configurar el formulari
-        //var_dump($this->_customdata);
         $course        = $this->_customdata['course']; // this contains the data of this form
         $categorycontext = context_coursecat::instance(-1); //template
 
@@ -236,35 +234,23 @@ class instance_course_edit_form extends moodleform {
         
         $this->add_action_buttons();
         $mform->addElement('hidden', 'id', $course->id);
+        
+        //define number of sections
+        $mform->addElement('hidden', 'idnumber', $course->idnumber);
+        $mform->addElement('hidden', 'format', 'topics');
+        
         $mform->setType('id', PARAM_INT);
+        
         $this->set_data($course);
     }
     
-    function definition_after_data() {
-        /*global $DB;
-        
-        //print 'after data!!';
-        
+    function definition_after_data() {                
         $mform = $this->_form;
-
-        // add course format options
-        $formatvalue = $mform->getElementValue('format');
-        if (is_array($formatvalue) && !empty($formatvalue)) {
-            $courseformat = course_get_format((object)array('format' => $formatvalue[0]));
-
-            $elements = $courseformat->create_edit_form_elements($mform);
-            //var_dump($elements);
-            for ($i = 0; $i < count($elements); $i++) {
-                $mform->insertElementBefore($mform->removeElement($elements[$i]->getName(), false),
-                        'addcourseformatoptionshere');
-            }
-        }*/
+        $mform->addElement('hidden', 'numsections', $mform->getElementValue('idnumber'));
     }
     
     function validation($data, $files) {
-     
-     ///////////considerar posar shortname = name i  mirar tema calendari
-     
+          
         $errors = array_merge($errors, enrol_course_edit_validation($data, $this->context));
 
         $courseformat = course_get_format((object)array('format' => $data['format']));

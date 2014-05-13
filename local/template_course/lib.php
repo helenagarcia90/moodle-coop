@@ -95,7 +95,7 @@ function course_get_cm_edit_actions_reduced(cm_info $mod, $indent = -1, $sr = nu
      *     this object contains information about the course before update
      * @return bool whether there were any changes to the options values
      */
-    function update_course_format_options($data, $oldcourse = null) {
+    function update_course_format_options($data) {
         return $this->update_format_options($data);
     }
     
