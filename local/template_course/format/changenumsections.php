@@ -30,6 +30,7 @@ require_once(dirname(__FILE__).'/../../../config.php');
 require_once('../lib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$delete = optional_param('delete', 0, PARAM_INT);
 $increase = optional_param('increase', true, PARAM_BOOL);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $courseformatoptions = course_get_format($course)->get_format_options();
@@ -41,7 +42,11 @@ require_login($course);
 require_capability('moodle/course:update', context_course::instance($course->id));
 require_sesskey();
 
-if (isset($courseformatoptions['numsections'])) {
+if($delete){
+     $courseformatoptions['numsections']--;
+     delete_records_select('')
+}
+else if (isset($courseformatoptions['numsections'])) {
     if ($increase) {
         // Add an additional section.
         $courseformatoptions['numsections']++;
