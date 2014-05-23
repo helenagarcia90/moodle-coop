@@ -30,8 +30,9 @@ require_once(dirname(__FILE__).'/../../../config.php');
 require_once('../lib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$sectionid = optional_param('sectionid', -1, PARAM_INT);
 $delete = optional_param('delete', 0, PARAM_INT);
-$increase = optional_param('increase', true, PARAM_BOOL);
+$increase = optional_param('increase', false, PARAM_BOOL);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $courseformatoptions = course_get_format($course)->get_format_options();
 
@@ -42,11 +43,12 @@ require_login($course);
 require_capability('moodle/course:update', context_course::instance($course->id));
 require_sesskey();
 
-if($delete){
-     $courseformatoptions['numsections']--;
-     delete_records_select('')
-}
-else if (isset($courseformatoptions['numsections'])) {
+global $DB;
+
+if($delete && isset($courseformatoptions['numsections'])){
+    //echo ('course='.$courseid.' AND id='.$sectionid);
+    $DB->delete_records('course_sections',array('course' => $courseid, 'section' => $sectionid));
+
     if ($increase) {
         // Add an additional section.
         $courseformatoptions['numsections']++;
@@ -58,6 +60,7 @@ else if (isset($courseformatoptions['numsections'])) {
     // Don't go less than 0, intentionally redirect silently (for the case of
     // double clicks).
     if ($courseformatoptions['numsections'] >= 0) {
+        //var_dump( course_get_format($course));
         course_get_format($course)->update_course_format_options(
                 array('numsections' => $courseformatoptions['numsections']));
     }
@@ -66,4 +69,4 @@ else if (isset($courseformatoptions['numsections'])) {
 $url = new moodle_url("/local/template_course/view.php", array('id'=> $course->id, 'sesskey' => sesskey()));
 //$url->set_anchor('changenumsections');
 // Redirect to where we were..
-redirect($url);
+//redirect($url);

@@ -84,7 +84,7 @@ class format_template_section_renderer extends format_section_renderer_base {
 
         // Now the list of sections..
         echo $this->start_section_list();
-
+        var_dump($modinfo->get_sections());
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
             if ($section == 0) {
                 // 0-section is displayed a little different then the others
