@@ -83,19 +83,26 @@
                 
                 $course = create_course((object)$data, array());
                 
-                //copiem les seccions
+                //copy sections
                 $sections = $DB->get_records('course_sections', array('course'=>$id));
-                $count = 0;
                 foreach ($sections as $section){
                     if($section->section > 0){
-                        print $section->course . " " . $section->name;
                         $section->course = $course->id;
-                        //$newsection = $DB->get_record('course_sections', array('course'=>$course->id, 'section' => $count));
                         unset($section->id);
-                        //print $newsection->id;
                         $DB->insert_record('course_sections', $section);
-                        $count++;
                     }
+                }
+
+                //copy events
+                $startdate = time();
+                $events = $DB->get_records('event', array('course'=>$id));
+                foreach ($events as $event){
+                    $event->courseid = $course->id;
+                    $event->timestart = $startdate;
+                    unset($event->id);
+                    //we calculate next startdate
+                    $startdate = $event->timestart + $event->timeduration;
+                    $DB->insert_record('event', $event);
                 }
                 
                 //afegir usuaris
