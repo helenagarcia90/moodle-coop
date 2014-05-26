@@ -82,9 +82,11 @@ class format_template_section_renderer extends format_section_renderer_base {
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
 
+        //We want to save the last section, for adding a new one
+        $lastsection = 0;
+        
         // Now the list of sections..
         echo $this->start_section_list();
-        var_dump($modinfo->get_sections());
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
             if ($section == 0) {
                 // 0-section is displayed a little different then the others
@@ -122,8 +124,8 @@ class format_template_section_renderer extends format_section_renderer_base {
                 }
                 echo $this->section_footer();
             }
+            $lastsection = $section;
         }
-
         if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
             // Print stealth sections if present.
             foreach ($modinfo->get_section_info_all() as $section => $thissection) {
@@ -134,31 +136,36 @@ class format_template_section_renderer extends format_section_renderer_base {
                 echo $this->stealth_section_header($section);
                 echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                 echo $this->stealth_section_footer();
+                $lastsection = $section;
             }
 
             echo $this->end_section_list();
 
             echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
+            
+            // add an activity (section with name activity, not visible)
+            $url = new moodle_url('format/changenumsections.php',
+                array('courseid' => $course->id,
+                      'increase' => true,
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1,
+                      'activity' => true ));
+            $straddactivity = 'Ajouter une &eacute;valuation';
+            $icon = $this->output->pix_icon('t/switch_plus', $straddactivity);
+            echo html_writer::span($straddactivity." ");
+            echo html_writer::link($url, $icon.get_accesshide($straddactivity), array('class' => 'increase-sections'));
 
             // Increase number of sections.
             $straddsection = get_string('increasesections', 'moodle');
-            $url = new moodle_url('changenumsections.php',
+            $url = new moodle_url('format/changenumsections.php',
                 array('courseid' => $course->id,
                       'increase' => true,
-                      'sesskey' => sesskey()));
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1));
             $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
+            echo html_writer::span($straddsection." ");
             echo html_writer::link($url, $icon.get_accesshide($straddsection), array('class' => 'increase-sections'));
-
-            if ($course->numsections > 0) {
-                // Reduce number of sections sections.
-                $strremovesection = get_string('reducesections', 'moodle');
-                $url = new moodle_url('changenumsections.php',
-                    array('courseid' => $course->id,
-                          'increase' => false,
-                          'sesskey' => sesskey()));
-                $icon = $this->output->pix_icon('t/switch_minus', $strremovesection);
-                echo html_writer::link($url, $icon.get_accesshide($strremovesection), array('class' => 'reduce-sections'));
-            }
+            
 
             echo html_writer::end_tag('div');
         } else {

@@ -139,8 +139,10 @@
     if (!isset($USER->editing)) {
         $USER->editing = 0;
     }
+    
+    $sesskey = sesskey();
     //if ($PAGE->user_allowed_editing()) {
-        if (confirm_sesskey()) {            
+        if (confirm_sesskey($sesskey)) {            
             $USER->editing = 1;        
             set_user_preference('usemodchooser', $modchooser);
         } else {
@@ -266,6 +268,6 @@
     
     //boto d'editar
     echo $OUTPUT->single_button(new moodle_url('/local/template_course/edit.php', 
-            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => sesskey())), 'Éditer', 'get');
+            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => sesskey())), 'Éditer le sujet', 'get');
 
     echo $OUTPUT->footer();

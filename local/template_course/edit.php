@@ -74,7 +74,7 @@ if ($id) {
     print_error('needcoursecategroyid');
 }
 
-
+print $course->id;
 // Prepare course and the editor.
 $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'maxbytes'=>$CFG->maxbytes, 'trusttext'=>false, 'noclean'=>true);
 
@@ -139,9 +139,10 @@ if ($editform->is_cancelled()) {
 
 } else if ($data = $editform->get_data()) { //retorna NULL si no esta cancelat, si esta submit i si esta ben validat
     // Process data if submitted.
-    $data->numsections = $data->idnumber;
+    $data->numsections = $data->lang;
     $data->shortname = $data->fullname;
-    
+    $data->idnumber = "";
+    var_dump($data);
     if (empty($course->id)) {
         $course = create_course($data, $editoroptions);
         
@@ -152,7 +153,7 @@ if ($editform->is_cancelled()) {
 
     // Redirect user to newly created/updated course.
     redirect(new moodle_url('/local/template_course/view.php', 
-            array('id' => $course->id, 'edit' => 'on', 'sesskey' => $USER->sesskey)));
+            array('id' => $course->id, 'edit' => 'on', 'sesskey' => $USER->sesskey, 'edited' => true) ) );
 }
 
 // Print the form.

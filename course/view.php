@@ -34,6 +34,12 @@
 
     $course = $DB->get_record('course', $params, '*', MUST_EXIST);
 
+    ////////////////////////////////
+    if($course->category == -1){
+        redirect(new moodle_url("/local/template_course/view.php", array(id => $course->id, sesskey => sesskey())));
+    }
+    ///////////////////////////////
+    
     $urlparams = array('id' => $course->id);
 
     // Sectionid should get priority over section number

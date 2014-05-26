@@ -24,19 +24,21 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 2.3
  */
+global $CFG;
 
 require_once(dirname(__FILE__).'/../../../config.php');
-#require_once($CFG->dirroot.'/course/lib.php');
 require_once('../lib.php');
+require_once($CFG->dirroot. '/calendar/lib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
-$sectionid = optional_param('sectionid', -1, PARAM_INT);
+$sectionid = required_param('sectionid', PARAM_INT);
 $delete = optional_param('delete', 0, PARAM_INT);
 $increase = optional_param('increase', false, PARAM_BOOL);
+$activity = optional_param('activity', false, PARAM_BOOL);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $courseformatoptions = course_get_format($course)->get_format_options();
 
-$PAGE->set_url('/local/template_course/changenumsections.php', array('courseid' => $courseid));
+$PAGE->set_url('/local/template_course/changenumsections.php', array('courseid' => $courseid, 'sesskey' => sesskey()));
 
 // Authorisation checks.
 require_login($course);
@@ -45,28 +47,50 @@ require_sesskey();
 
 global $DB;
 
-if($delete && isset($courseformatoptions['numsections'])){
-    //echo ('course='.$courseid.' AND id='.$sectionid);
-    $DB->delete_records('course_sections',array('course' => $courseid, 'section' => $sectionid));
-
-    if ($increase) {
+ if ($increase) {
         // Add an additional section.
         $courseformatoptions['numsections']++;
-    } else {
+        $cw = new stdClass();
+        $cw->course   = $courseid;
+        $cw->section  = $sectionid;
+        $cw->summary  = '';
+        $cw->summaryformat = FORMAT_HTML;
+        $cw->sequence = '';
+        if($activity){
+            $cw->name = "&Eacute;valuation";
+        }
+        else {
+            $event = new stdClass;
+            $event->name         = 'Section '.$sectionid;
+            $event->description  = '';
+            $event->courseid     = $courseid;
+            $event->groupid      = 0;
+            $event->userid       = 0;
+            $event->modulename   = '';
+            $event->instance     = $sectionid;
+            $event->eventtype    = 'due'; // For activity module's events, this can be used to set the alternative text of the event icon. Set it to 'pluginname' unless you have a better string.
+            $date = usergetdate(time());
+            list($d, $m, $y) = array($date['mday'], $date['mon'], $date['year']);            
+            $event->timestart    = make_timestamp($y, $m, 1);
+            $event->visible      = 1;
+            $event->timeduration = 20000000;
+            calendar_event::create($event);
+        }
+        $id = $DB->insert_record("course_sections", $cw);
+ } else if($delete && isset($courseformatoptions['numsections'])){
+        $DB->delete_records('course_sections',array('course' => $courseid, 'section' => $sectionid));
         // Remove a section.
         $courseformatoptions['numsections']--;
-    }
+ }
 
-    // Don't go less than 0, intentionally redirect silently (for the case of
-    // double clicks).
-    if ($courseformatoptions['numsections'] >= 0) {
-        //var_dump( course_get_format($course));
-        course_get_format($course)->update_course_format_options(
-                array('numsections' => $courseformatoptions['numsections']));
-    }
-}
+ // Don't go less than 0, intentionally redirect silently (for the case of
+ // double clicks).
+ if ($courseformatoptions['numsections'] >= 0) {
+     //var_dump( course_get_format($course));
+     course_get_format($course)->update_course_format_options(
+             array('numsections' => $courseformatoptions['numsections']));
+ }
 
 $url = new moodle_url("/local/template_course/view.php", array('id'=> $course->id, 'sesskey' => sesskey()));
-//$url->set_anchor('changenumsections');
 // Redirect to where we were..
-//redirect($url);
+redirect($url);

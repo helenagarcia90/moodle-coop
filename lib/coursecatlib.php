@@ -2132,6 +2132,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
             $sql = "SELECT cc.id, cc.sortorder, cc.name, cc.visible, cc.parent, cc.path, $ctxselect
                     FROM {course_categories} cc
                     JOIN {context} ctx ON cc.id = ctx.instanceid AND ctx.contextlevel = :contextcoursecat
+                    WHERE cc.id > 0
                     ORDER BY cc.sortorder";
             $rs = $DB->get_recordset_sql($sql, array('contextcoursecat' => CONTEXT_COURSECAT));
             $baselist = array();
