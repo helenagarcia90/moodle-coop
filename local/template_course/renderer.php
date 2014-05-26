@@ -578,12 +578,12 @@ class template_course_renderer extends core_course_renderer {
             $output .= html_writer::start_tag('div', array('class' => 'horizontal'));
         }
 
-        /*if (!empty($activities[MOD_CLASS_RESOURCE])) {
-            $select = new url_select($activities[MOD_CLASS_RESOURCE], '', array(''=>$straddresource), "ressection$section");
-            $select->set_help_icon('resources');
-            $select->set_label($strresourcelabel, array('class' => 'accesshide'));
-            $output .= $this->output->render($select);
-        }*/
+        if (!empty($activities[MOD_CLASS_RESOURCE])) {
+            $url = new moodle_url('/course/modedit.php', array('add'=>'resource', 'type'=>'', 'course'=>$course->id, 'section'=>$section, 
+                'return'=>0, 'sr'=>0));
+            $link = html_writer::link($url, $straddresource);
+            $output .= ($link);
+        }
 
         /*if (!empty($activities[MOD_CLASS_ACTIVITY])) {
             $select = new url_select($activities[MOD_CLASS_ACTIVITY], '', array(''=>$straddactivity), "section$section");

@@ -23,15 +23,17 @@
  * @package course
  */
 
-require_once("../config.php");
-require_once("lib.php");
+global $CFG, $PAGE, $DB;
+
+require_once("../../../config.php");
+require_once("../lib.php");
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->libdir . '/conditionlib.php');
 
 $id = required_param('id', PARAM_INT);    // course_sections.id
 $sectionreturn = optional_param('sr', 0, PARAM_INT);
 
-$PAGE->set_url('/course/editsection.php', array('id'=>$id, 'sr'=> $sectionreturn));
+$PAGE->set_url('/local/template_course/format/editsection.php', array('id'=>$id, 'sr'=> $sectionreturn));
 
 $section = $DB->get_record('course_sections', array('id' => $id), '*', MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $section->course), '*', MUST_EXIST);
@@ -45,17 +47,28 @@ require_capability('moodle/course:update', $context);
 $sectioninfo = get_fast_modinfo($course)->get_section_info($sectionnum);
 
 $editoroptions = array('context'=>$context ,'maxfiles' => EDITOR_UNLIMITED_FILES, 'maxbytes'=>$CFG->maxbytes, 'trusttext'=>false, 'noclean'=>true);
-$mform = course_get_format($course->id)->editsection_form($PAGE->url,
-        array('cs' => $sectioninfo, 'editoroptions' => $editoroptions));
+
+//section format editor
+require_once('editsection_form.php');
+
+$customdata = array('cs' => $sectioninfo, 'editoroptions' => $editoroptions);
+
+if (!array_key_exists('course', $customdata)) {
+            $customdata['course'] = $course;
+}
+$mform = new editsection_template_form($PAGE->url, $customdata);
+
 // set current value, make an editable copy of section_info object
 // this will retrieve all format-specific options as well
 $mform->set_data(convert_to_array($sectioninfo));
+print 'fff';
 
 if ($mform->is_cancelled()){
     // Form cancelled, return to course.
     redirect(course_get_url($course, $section, array('sr' => $sectionreturn)));
 } else if ($data = $mform->get_data()) {
     // Data submitted and validated, update and return to course.
+    print 'edit';
     $DB->update_record('course_sections', $data);
     rebuild_course_cache($course->id, true);
     if (isset($data->section)) {
@@ -84,13 +97,39 @@ if ($mform->is_cancelled()){
             )
         );
     $event->trigger();
+    
+    //create or update event with section dates info
+    require_once($CFG->dirroot. '/calendar/lib.php');
 
+    $event = new stdClass;
+            $event->name         = 'Section '.$data->section;
+            $event->description  = '';
+            $event->courseid     = $course->id;
+            $event->groupid      = 0;
+            $event->userid       = 0;
+            $event->modulename   = '';
+            $event->instance     = $data->section;
+            $event->eventtype    = 'course'; // For activity module's events, this can be used to set the alternative text of the event icon. Set it to 'pluginname' unless you have a better string.
+            $date = usergetdate(time());
+            list($d, $m, $y) = array($date['mday'], $date['mon'], $date['year']);            
+            $event->timestart    = make_timestamp($y, $m, 1);
+            $event->visible      = 1;
+            $event->timeduration = $data->availablefrom*24*3600;
+            if($existentevent = $DB->get_record('event', array('courseid' =>$course->id, 'instance' => $data->section))){
+                print 'eh-eh-eh';
+                $event->id = $existentevent->id;
+                $DB->update_record('event', $event);
+                print 'ttt';
+            }else{
+                calendar_event::create($event);
+            }
     $PAGE->navigation->clear_cache();
     redirect(course_get_url($course, $section, array('sr' => $sectionreturn)));
 }
 
 // The edit form is displayed for the first time or if there was validation error on the previous step.
 $sectionname  = get_section_name($course, $sectionnum);
+
 $stredit      = get_string('edita', '', " $sectionname");
 $strsummaryof = get_string('summaryof', '', " $sectionname");
 
@@ -98,8 +137,6 @@ $PAGE->set_title($stredit);
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add($stredit);
 echo $OUTPUT->header();
-
 echo $OUTPUT->heading($strsummaryof);
-
 $mform->display();
 echo $OUTPUT->footer();

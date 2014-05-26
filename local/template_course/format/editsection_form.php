@@ -14,7 +14,7 @@ require_once($CFG->libdir.'/gradelib.php');
  *
  * Course format plugins may specify different editing form to use
  */
-class editsection_form extends moodleform {
+class editsection_template_form extends moodleform {
 
     function definition() {
 
@@ -32,6 +32,10 @@ class editsection_form extends moodleform {
         $mform->setDefault('usedefaultname', true);
         $mform->setType('name', PARAM_TEXT);
         $mform->disabledIf('name','usedefaultname','checked');
+        
+        //duration
+        $mform->addElement('text', 'availablefrom', 'Duration du theme en jours');
+        $mform->setDefault('availablefrom', '1'); //provisional number of sections 
 
         /// Prepare course and the editor
 
@@ -57,6 +61,7 @@ class editsection_form extends moodleform {
 
         $mform  = $this->_form;
         $course = $this->_customdata['course'];
+
         $context = context_course::instance($course->id);
 
         if (!empty($CFG->enableavailability)) {
