@@ -78,9 +78,26 @@
                 $data->category=1;
                 $data->idnumber='';
                 //barregem
-                $data = array_merge((array)$course, (array)$data);                
+                $data = array_merge((array)$course, (array)$data);
+                
                 
                 $course = create_course((object)$data, array());
+                
+                //copiem les seccions
+                $sections = $DB->get_records('course_sections', array('course'=>$id));
+                $count = 0;
+                foreach ($sections as $section){
+                    if($section->section > 0){
+                        print $section->course . " " . $section->name;
+                        $section->course = $course->id;
+                        //$newsection = $DB->get_record('course_sections', array('course'=>$course->id, 'section' => $count));
+                        unset($section->id);
+                        //print $newsection->id;
+                        $DB->insert_record('course_sections', $section);
+                        $count++;
+                    }
+                }
+                
                 //afegir usuaris
                 //redirect(new moodle_url('/enrol/users.php', array('id' => $course->id, 'sesskey' => $USER->sesskey)));
                 redirect(new moodle_url('/course/view.php', array('id' => $course->id, 'sesskey' => $USER->sesskey)));

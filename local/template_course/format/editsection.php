@@ -116,7 +116,6 @@ if ($mform->is_cancelled()){
             $event->visible      = 1;
             $event->timeduration = $data->availablefrom*24*3600;
             if($existentevent = $DB->get_record('event', array('courseid' =>$course->id, 'instance' => $data->section))){
-                print 'eh-eh-eh';
                 $event->id = $existentevent->id;
                 $DB->update_record('event', $event);
                 print 'ttt';
