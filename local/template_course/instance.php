@@ -85,17 +85,25 @@
                 
                 //copy sections
                 $sections = $DB->get_records('course_sections', array('course'=>$id));
+                $resources = $DB->get_records('course_modules', array('course'=>$id));
                 foreach ($sections as $section){
                     if($section->section > 0){
                         $section->course = $course->id;
                         unset($section->id);
                         $DB->insert_record('course_sections', $section);
                     }
+                    //copy course resources from each section               
+                    /*foreach ($resources as $resource){
+                        $resource->course = $course->id;
+                        $resource->section = $section->id;
+                        unset($resource->id);
+                        $DB->insert_record('course_modules', $resource);
+                    }*/
                 }
-
+                
                 //copy events
-                $startdate = time();
-                $events = $DB->get_records('event', array('course'=>$id));
+                $startdate = $course->startdate;
+                $events = $DB->get_records('event', array('courseid'=>$id));
                 foreach ($events as $event){
                     $event->courseid = $course->id;
                     $event->timestart = $startdate;
