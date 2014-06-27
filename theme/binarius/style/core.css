@@ -49,24 +49,25 @@ fieldset#general {
 
 #page-header {
     clear: both;
-    height: 200px;
+    overflow: hidden;
 }
 
 #header-logo {
     width: 15%;
     float: left;
-}
-
-#header-logo a img {
+    background: #fff url('/moodle/theme/binarius/pix/logo.jpg') 0 0 no-repeat;
+    background-size: 100% auto;
+    height: 200px;
 }
 
 #page-header-wrapper {
     width: 85%;
     background: #f04916 url('/moodle/theme/binarius/pix/header.png') 0 0;
-    float: left;
+    float: right;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
+    height: 200px;
 }
 
 #page-header .headermain {

@@ -51,7 +51,7 @@ echo $OUTPUT->doctype() ?>
 
             <div id="page-header" class="inside">
                 <div id="header-logo"> 
-                    <?php echo '<a href="/moodle" ><img src="/moodle/theme/binarius/pix/logo.jpg" alt="" align="left" /></a>'; ?>
+                    <?php //echo '<a href="/moodle" ><img src="/moodle/theme/binarius/pix/logo.jpg" alt="" /></a>'; ?>
                 </div>
                 <div id="page-header-wrapper" class="wrapper clearfix">
                     <?php if ($hasheading) { ?>

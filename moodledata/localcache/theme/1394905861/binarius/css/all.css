@@ -4188,8 +4188,7 @@ solid #ddd;border-collapse:collapse}#page-admin-course-manage .generalbox th,
 .forumheaderlist
 th{background:#f3f3f3;border-bottom-width:2px}body.pagelayout-popup{background:#fff !important}body{background:#aaa;margin:0;padding:0;color:#000}body,h1,h2,h3,h4,h5,h6,p,ul,ol,dl,input,textarea{font-family:"Trebuchet MS",Helvetica,Arial,sans-serif}#wrapper{margin:25px
 75px;background:#fff;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-box-shadow:0px 0px 10px #000;-moz-box-shadow:0px 0px 10px #000;box-shadow:0px 0px 10px #000;padding:10px}a:link,a:visited{color:#f14e16}a:hover,a:active{color:#fb961c}a
-img{border:none}a:active{outline:none}fieldset#general{border-color:#ddd}#page-header{clear:both;height:200px}#header-logo{width:15%;float:left}#header-logo a
-img{}#page-header-wrapper{width:85%;background:#f04916 url('/moodle/theme/binarius/pix/header.png') 0 0;float:left;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px}#page-header
+img{border:none}a:active{outline:none}fieldset#general{border-color:#ddd}#page-header{clear:both;overflow:hidden}#header-logo{width:15%;float:left;background:#fff url('/moodle/theme/binarius/pix/logo.jpg') 0 0 no-repeat;background-size:100% auto;height:200px}#page-header-wrapper{width:85%;background:#f04916 url('/moodle/theme/binarius/pix/header.png') 0 0;float:right;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;height:200px}#page-header
 .headermain{color:#fff;padding:0.8em 0.5em;font-size:2.75em}.headermenu{color:#fff}.headermenu
 a{text-decoration:underline;color:#fff}.navbar{font-size:0.9em;padding:10px;color:#555}.navbar
 .sep{font-size:0.85em;padding-left:5px}.block{border:none}.block
