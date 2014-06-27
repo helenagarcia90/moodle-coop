@@ -1,0 +1,18 @@
+a:13:{s:12:"choosereadme";s:914:"<div class="clearfix">
+<div class="well">
+<h2>Clean</h2>
+<p><img class="img-polaroid" src="clean/pix/screenshot.jpg" /></p>
+</div>
+<div class="well">
+<h3>À propos</h3>
+<p>Clean est un thème Bootstrap modifié pour Moodle qui hérite des styles et procédures de rendu (<i>renderers</i>) de son thème parent.</p>
+<h3>Parents</h3>
+<p>Ce thème se fonde sur le thème Bootstrap, qui a été créé pour Moodle 2.5, avec l'aide de<br />Stuart Lamour, Mark Aberdour, Paul Hibbitts, Mary Evans.</p>
+<h3>Crédits</h3>
+<p>Auteurs : Bas Brands, David Scotson, Mary Evans<br />Contact : bas@sonsbeekmedia.nl<br />Site web : <a href="http://www.basbrands.nl">www.basbrands.nl</a></p>
+<h3>Annoncer un bogue</h3>
+<p><a href="http://tracker.moodle.org">http://tracker.moodle.org</a></p>
+<h3>Plus d'information</h3>
+<p><a href="clean/README.txt">Comment copier et personnaliser ce thème</a> (en anglais).</p>
+</div>
+</div>";s:11:"configtitle";s:5:"Clean";s:9:"customcss";s:18:"CSS personnalisée";s:13:"customcssdesc";s:140:"Les règles CSS que vous définissez ici seront ajoutées à chacune des pages, vous permettant ainsi de personnaliser facilement ce thème.";s:8:"footnote";s:12:"Pied de page";s:12:"footnotedesc";s:73:"Le contenu de ce champ sera affiché dans le pied-de-page de chaque page.";s:6:"invert";s:31:"Inverser la barre de navigation";s:10:"invertdesc";s:93:"Alterne le texte et le fond de la barre de navigation en haut de la page entre noir et blanc.";s:4:"logo";s:4:"Logo";s:8:"logodesc";s:291:"Veuillez ajouter votre logo personnalisé si vous désirez l'ajouter à l'entête du site.<br />Si la hauteur de votre logo dépasse 75px, ajoutez la règle CSS suivante dans la zone CSS personnalisée ci-dessous.<br />a.logo {height: 100px;} en indiquant la hauteur en pixels de votre logo.";s:10:"pluginname";s:5:"Clean";s:16:"region-side-post";s:6:"Droite";s:15:"region-side-pre";s:6:"Gauche";}

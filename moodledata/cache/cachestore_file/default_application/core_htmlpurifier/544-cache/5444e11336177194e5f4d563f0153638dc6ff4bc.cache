@@ -1,0 +1,8 @@
+s:901:"<p>Le module dossier permet à un enseignant d'afficher plusieurs fichiers dans un dossier, réduisant ainsi le défilement horizontal d'une page de cours. Un dossier compressé (ZIP) peut être déposé et décompressé pour être affiché, ou un dossier vide peut être créé et des fichiers déposés à l'intérieur.</p>
+
+<p>Un dossier peut être utilisé par exemple pour :</p>
+
+<ul><li>rassembler plusieurs fichiers sur un même sujet</li>
+<li>fournir sur la page de cours un espace de dépôt de fichiers commun à plusieurs enseignants, en cachant le dossier de sorte que seuls les enseignants puissent le voir</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/folder/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

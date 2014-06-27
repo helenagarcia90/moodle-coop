@@ -2,7 +2,7 @@
 --------------------------*/
 
 body {
-    background: #555;
+    background: #aaa;
     margin: 0;
     padding: 0;
     color: #000;
@@ -48,7 +48,22 @@ fieldset#general {
 ------------------------------*/
 
 #page-header {
-    background: #f04916 url([[pix:theme|header]]) repeat-x 0 0;
+    clear: both;
+    height: 200px;
+}
+
+#header-logo {
+    width: 15%;
+    float: left;
+}
+
+#header-logo a img {
+}
+
+#page-header-wrapper {
+    width: 85%;
+    background: #f04916 url('/moodle/theme/binarius/pix/header.png') 0 0;
+    float: left;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;

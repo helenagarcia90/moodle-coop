@@ -1,0 +1,11 @@
+s:1756:"<p>Les outils externes permettent aux utilisateurs de Moodle d'interagir avec des ressources d'apprentissage sur d'autres sites web. Par exemple, un outil externe donnera accès à un nouveau type d'activité et ou des moyens d'enseignements d'un éditeur.</p>
+
+<p>Pour configurer une instance d'un outil externe, le fournisseur de l'outil doit supporter la norme LTI (Learning Tools Interoperability). Les fournisseurs supportant LTI proposent des instructions sur la façon de configurer les instances externes de leurs outils. Les types d'outil configurés par les administrateurs du site seront aussi disponibles pour les utilisateurs.</p>
+
+<p>Les outils externes diffèrent des ressources de type URL de plusieurs façons.</p>
+
+<ul><li><strong>Contextualisation</strong> - Les outils externes ont accès à des informations sur l'utilisateur qui lancent l'outil, par exemple le nom de l'institution, l'identifiant du cours, l'identifiant de l'utilisateur et d'autres informations comme le nom d'utilisateur ou son adresse de courriel.</li>
+<li><strong>Intégration élevée</strong> - Les outils externes supportent la lecture, la modification et la suppression des notes associées  à l'activité. D'autres points d'intégration sont planifiés pour de prochaines versions.</li>
+<li><strong>Sécurité</strong> - Les configurations d'outils externes créent une liaison sécurisée entre Moodle et le fournisseur de l'outil, permettant une communication sûre entre eux.</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/lti/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

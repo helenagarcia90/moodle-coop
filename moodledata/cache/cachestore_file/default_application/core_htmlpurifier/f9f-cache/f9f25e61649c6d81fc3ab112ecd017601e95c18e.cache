@@ -1,0 +1,6 @@
+s:1051:"<p>Le module URL permet à l'enseignant de fournir un lien web comme ressource de cours. Tout ce qui est disponible librement en ligne, documents, images, etc., peut être lié ; il n'est pas nécessaire que l'URL soit celle de la page d'accueil d'un site web. L'URL de n'importe quelle page web peut être copiée et collée. L'enseignant peut aussi utiliser le sélecteur de fichiers et choisir un lien d'un dépôt comme Flickr, YouTube ou Wikipedia (suivant les dépôts activés dans le site).</p>
+
+<p>De nombreuses possibilités d'affichage sont offertes, par exemple l'intégration dans une page ou l'ouverture dans une nouvelle fenêtre. Des options avancées permettent si nécessaire de passer à l'URL des informations telles que le nom du participant, par exemple.</p>
+
+<div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/url/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

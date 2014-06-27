@@ -1,0 +1,8 @@
+s:979:"<p>Un paquetage IMS content est un ensemble de fichiers combinés suivant la spécification IMS Content Packaging, afin d'être réutilisé dans différents systèmes. Le module IMS content package permet de déposer de tels paquetages sous la forme de fichiers compressés ZIP et de les ajouter comme ressource dans un cours.</p>
+
+<p>Le contenu est en principe affiché sur plusieurs pages avec une navigation permettant de passer d'une page à l'autre. Il y a diverses options d'affichage, dans une fenêtre surgissante, avec une table des matières, avec des boutons de navigation, etc.</p>
+
+<p>Un paquetage IMS content peut être utilisé pour présenter des contenus multimédias ou des animations.</p>
+
+<div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/imscp/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

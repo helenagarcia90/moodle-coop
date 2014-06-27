@@ -1,0 +1,17 @@
+s:1799:"<p>Le module d'activité glossaire permet aux participants de créer et de gérer une liste de définitions, comme un dictionnaire, ou de collecter et organiser des ressources ou des informations.</p>
+
+<p>L'enseignant peut permettre de joindre des fichiers aux articles de glossaire. Les images jointes sont affichées dans l'article. Les articles peuvent être recherchés ou consultés alphabétiquement ou par catégorie, date ou auteur. Les articles peuvent être approuvés par défaut ou nécessiter une approbation manuelle par l'enseignant avant d'être consultables par les autres participants.</p>
+
+<p>Si le filtre de liens automatiques des glossaires est activé, les articles des glossaires seront automatiquement liés lorsque les expressions définies apparaissent dans le cours.</p>
+
+<p>L'enseignant peut autoriser les commentaires sur les articles. Ceux-ci peuvent également être évalués par les enseignants ou les participants (évaluation par les pairs). Les évaluations sont combinées et la note finale résultante est enregistrée dans le carnet de notes.</p>
+
+<p>Les glossaires ont de nombreux emplois, par exemple :</p>
+
+<ul><li>une banque de termes techniques construite de façon collaborative</li>
+<li>un annuaire dans lequel les participants ajoutent leur nom et se présentent</li>
+<li>une ressource de trucs et astuces utiles sur un sujet particulier</li>
+<li>une zone de partage de vidéos, d'images ou de sons</li>
+<li>une ressource permettant la révision de faits à mémoriser</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/glossary/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

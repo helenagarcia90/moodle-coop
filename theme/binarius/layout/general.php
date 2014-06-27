@@ -1,5 +1,7 @@
 <?php
 
+global $CFG;
+
 $hasheading = ($PAGE->heading);
 $hasnavbar = (empty($PAGE->layout_options['nonavbar']) && $PAGE->has_navbar());
 $hasfooter = (empty($PAGE->layout_options['nofooter']));
@@ -35,29 +37,31 @@ echo $OUTPUT->doctype() ?>
 <head>
     <title><?php echo $PAGE->title ?></title>
     <link rel="shortcut icon" href="<?php echo $OUTPUT->pix_url('favicon', 'theme')?>" />
-    <?php echo $OUTPUT->standard_head_html() ?>
+    <?php echo $OUTPUT->standard_head_html() ?> 
 </head>
 
 <body id="<?php p($PAGE->bodyid) ?>" class="<?php p($PAGE->bodyclasses.' '.join(' ', $bodyclasses)) ?>">
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
 <div id="page">
-
     <?php if ($hasheading || $hasnavbar || !empty($courseheader) || !empty($coursefooter)) { ?>
            <div id="wrapper" class="clearfix">
 
 <!-- START OF HEADER -->
 
             <div id="page-header" class="inside">
+                <div id="header-logo"> 
+                    <?php echo '<a href="/moodle" ><img src="/moodle/theme/binarius/pix/logo.jpg" alt="" align="left" /></a>'; ?>
+                </div>
                 <div id="page-header-wrapper" class="wrapper clearfix">
-
                     <?php if ($hasheading) { ?>
-                        <h1 class="headermain"><?php echo $PAGE->heading ?></h1>
-                        <div class="headermenu"><?php
+                        <h1 class="headermain"><?php //echo $PAGE->heading ?></h1>
+                        <div class="headermenu">
+                            <?php
                             echo $OUTPUT->login_info();
-                                if (!empty($PAGE->layout_options['langmenu'])) {
+                                /*if (!empty($PAGE->layout_options['langmenu'])) {*/
                                     echo $OUTPUT->lang_menu();
-                                }
+                                //}
                             echo $PAGE->headingmenu ?>
                         </div>
                     <?php } ?>
@@ -128,11 +132,13 @@ echo $OUTPUT->doctype() ?>
 
         <?php if ($hasfooter) { ?>
             <div id="page-footer" class="wrapper">
-                <p class="helplink"><?php echo page_doc_link(get_string('moodledocslink')) ?></p>
+                <!--p class="helplink"><?php echo page_doc_link(get_string('moodledocslink')) ?></p-->
+                <p>&Eacute;cole Superieure d'Informatique (Bobo-Dioulasso)</p>
+                <p>Pour rapporter une erreur contacter: moodle-esi @ gmail.com</p>
                 <?php
-                    echo $OUTPUT->login_info();
-                    echo $OUTPUT->home_link();
-                    echo $OUTPUT->standard_footer_html();
+                    #echo $OUTPUT->login_info();
+                    #echo $OUTPUT->home_link();
+                    #echo $OUTPUT->standard_footer_html();
                 ?>
             </div>
         <?php } ?>

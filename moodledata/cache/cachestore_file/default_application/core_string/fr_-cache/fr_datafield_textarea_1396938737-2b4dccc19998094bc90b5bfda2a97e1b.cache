@@ -1,0 +1,1 @@
+a:3:{s:8:"maxbytes";s:50:"Taille maximale en octets des fichiers incorporés";s:13:"maxbytes_desc";s:61:"Si cette valeur est 0, la taille sera illimitée par défaut.";s:10:"pluginname";s:13:"Zone de texte";}

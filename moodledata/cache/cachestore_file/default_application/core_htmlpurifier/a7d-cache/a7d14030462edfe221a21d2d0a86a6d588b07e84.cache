@@ -1,0 +1,14 @@
+s:1459:"<p>Le module d'activité leçon permet à l'enseignant de proposer des contenus et/ou des activités d'exercice d'une façon intéressante et flexible.</p>
+
+<p>Une leçon est créée par l'enseignant et se compose de plusieurs pages qui chacune se termine normalement par une question et un choix de réponses. Les types de questions comprennent les questions à choix multiples, de correspondance et à réponse courte. Selon la réponse du participant, la leçon peut se poursuivre par la page suivante ou par une autre page.</p>
+
+<p>Une leçon peut si désiré être sanctionnée par une note. La note est alors enregistrée dans le carnet de notes.</p>
+
+<p>Les leçons peuvent être utilisées :</p>
+
+<ul><li>pour l'apprentissage auto-géré d'un nouveau sujet</li>
+<li>pour des simulations ou des jeux de rôles exerçant la prise de décision</li>
+<li>comme un moyen de profiter des différents styles d'apprentissage, en offrant au participant une page vidéo, une page podcast ou une page de texte suivant sa préférence</li>
+<li>pour des supports de révision différenciés, avec plusieurs jeux de questions de révision suivant les réponses précédemment données</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/lesson/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

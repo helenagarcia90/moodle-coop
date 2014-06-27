@@ -1,0 +1,1 @@
+a:3:{s:10:"pluginname";s:35:"Délai entre les tentatives de test";s:13:"youcannotwait";s:79:"Ce test se termine avant que vous ne puissiez effectuer une nouvelle tentative.";s:11:"youmustwait";s:118:"Vous devez avant de pouvoir refaire une tentative de ce test. Vous pourrez effectuer une nouvelle tentative dans {$a}.";}

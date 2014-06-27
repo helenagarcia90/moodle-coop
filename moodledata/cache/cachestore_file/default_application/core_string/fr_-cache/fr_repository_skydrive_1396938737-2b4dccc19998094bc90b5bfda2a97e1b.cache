@@ -1,0 +1,4 @@
+a:7:{s:19:"cachedef_foldername";s:20:"Nom du dossier cache";s:8:"clientid";s:9:"ID client";s:12:"configplugin";s:29:"Configurer Microsoft Skydrive";s:9:"oauthinfo";s:423:"<p>Pour utiliser ce plugin, vous devez enregistrer votre site <a href="https://account.live.com/developers/applications/">chez Microsoft</a>.</p>
+<p>Au cours du processus d'enregistrement, vous devrez saisir l'URL suivante sous « Domaine de redirection »:</p>
+<p>{$a->callbackurl}</p>
+<p>Une fois l'enregistrement effectué, un ID client et un secret vous seront fournis, que vous pourrez saisir dans ce formulaire.</p>";s:10:"pluginname";s:18:"Microsoft Skydrive";s:6:"secret";s:6:"Secret";s:13:"skydrive:view";s:29:"Consulter un dépôt Skydrive";}

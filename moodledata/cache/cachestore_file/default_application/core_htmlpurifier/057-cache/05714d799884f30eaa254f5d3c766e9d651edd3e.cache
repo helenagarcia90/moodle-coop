@@ -1,0 +1,20 @@
+s:2416:"<p>Le module d'activité forum permet aux participants de tenir des discussions asynchrones, c'est-à-dire ne nécessitant pas leur participation au même moment.</p>
+
+<p>Divers types de forums peuvent être choisis, comme un forum standard, où chacun peut lancer de nouvelles discussions à n'importe quel moment, ou un forum où chaque participant doit lancer exactement une discussion, ou encore un forum de questions et réponses où ils doivent écrire un message avant de voir ceux des autres participants. L'enseignant peut autoriser que des fichiers soit joints aux messages des forums.</p>
+
+<p>Les images jointes sont affichées dans le message. Les participants peuvent s'abonner à un forum afin de recevoir les messages des forums par courriel. L'enseignant peut rendre l'abonnement facultatif, obligatoire ou l'empêcher complètement. Au besoin, les participants peuvent être empêchés de poster plus d'un nombre donné de messages durant une période donnée, afin d'éviter que l'un d'entre eux domine les discussions.</p>
+
+<p>Les messages des forums peuvent être évalués par les enseignants ou les participants (évaluation par les pairs). Les évaluations sont combinées pour former une note  qui est enregistrée dans le carnet de notes.</p>
+
+<p>Les forums ont de nombreuses utilisations, comme :</p>
+
+<ul><li>un espace de présentation pour que les participants à un cours apprennent à se connaître</li>
+<li>une tribune pour diffuser les informations du cours (à l'aide d'un forum de nouvelles avec abonnement imposé)</li>
+<li>un centre d'aide où les enseignants et les participants peuvent donner des conseils</li>
+<li>une façon informelle de partager des documents entre participants (et éventuellement d'évaluer par les pairs)</li>
+<li>poursuivre en ligne une discussion commencée lors d'une session face à face</li>
+<li>un endroit pour des discussions réservées aux enseignants (avec un forum caché)</li>
+<li>pour des activités complémentaires, par exemple des problèmes ouverts où les participants peuvent suggérer des solutions</li>
+<li>un lieu social pour des discussions hors-sujet</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/forum/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

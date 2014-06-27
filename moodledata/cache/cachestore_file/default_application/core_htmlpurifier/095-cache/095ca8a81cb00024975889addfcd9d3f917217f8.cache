@@ -1,0 +1,11 @@
+s:1057:"<p>Le module fichier permet à l'enseignant de fournir un fichier comme ressource d'apprentissage dans un cours. Lorsque c'est possible, le fichier est affiché dans la page du cours ; sinon, les participants auront le choix de le télécharger. Le fichier peut comporter des fichiers dépendants, par exemple un fichier HTML pourra contenir des images ou des objets Flash.</p>
+
+<p>Les participants doivent bien entendu disposer sur leur ordinateur du logiciel adéquat pour lire le fichier.</p>
+
+<p>Un fichier peut être utilisé pour</p>
+
+<ul><li>partager un diaporama avec une classe</li>
+<li>inclure un mini site web comme ressource de cours</li>
+<li>fournir des fichiers partiellement terminés que les participants doivent modifier et remettre terminés comme devoir</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/resource/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

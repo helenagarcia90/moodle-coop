@@ -1,0 +1,1 @@
+a:5:{s:19:"event_book_exported";s:14:"Livre exporté";s:18:"exportimscp:export";s:56:"Exporter le livre sous forme de paquetage de contenu IMS";s:13:"generateimscp";s:16:"Générer IMS CP";s:10:"nochapters";s:68:"Pas de chapitre de livre trouvé. Impossible d'exporter vers IMS CP.";s:10:"pluginname";s:22:"Export de livre IMS CP";}

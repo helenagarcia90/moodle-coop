@@ -1,0 +1,16 @@
+s:1664:"<p>Le module d'activité test permet à l'enseignant de concevoir et gérer des tests comportant des questions de divers types, notamment des questions à choix multiples, vrai-faux, de correspondances, à réponses courtes ou calculées.</p>
+
+<p>L'enseignant peut autoriser plusieurs tentatives pour un test, l'ordre des questions étant choisi aléatoirement. Une limite de temps peut être fixée au besoin.</p>
+
+<p>Chaque tentative est évaluée automatiquement et la note enregistrée dans le carnet de notes. L'enseignant peut choisir de donner un feedback et/ou d'afficher les réponses correctes durant la tentative, immédiatement après la tentative ou ultérieurement, lorsque le test est fermé.</p>
+
+<p>L'enseignant peut choisir entre divers comportements de questions, notamment le mode adaptatif, qui propose des indices avant que l'étudiant n'essaie une nouvelle fois de répondre, et le feedback immédiat avec évaluation de la certitude de la réponse, où l'étudiant doit indiquer dans quelle mesure il pense que sa réponse est la bonne.</p>
+
+<p>Les tests peuvent être utilisés :</p>
+
+<ul><li>comme mini-tests pour des devoirs de lecture ou au terme de l'étude d'un thème</li>
+<li>comme exercice pour un examen, en utilisant les questions de l'examen de l'année précédente</li>
+<li>pour fournir un feedback de performance</li>
+<li>pour l'auto-évaluation</li>
+</ul><div class="helpdoclink"><a href="http://docs.moodle.org/26/fr/mod/quiz/view" class="helplinkpopup"><img class="iconhelp icon-pre" alt="Plus d'aide" title="Plus d'aide" src="http://localhost/moodle/theme/image.php/binarius/core/1394905861/docs" />Plus d'aide</a></div>
+";

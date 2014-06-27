@@ -1,0 +1,1 @@
+a:4:{s:10:"pluginname";s:11:"Fichier XML";s:11:"xml:publish";s:45:"Publier l'exportation des notes au format XML";s:8:"xml:view";s:32:"Exporter les notes au format XML";s:19:"useridnumberwarning";s:112:"Les utilisateurs sans identifiant (ID) sont exclus de l'exportation XML, car ils ne peuvent pas être importés.";}
