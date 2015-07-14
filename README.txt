@@ -1,29 +1,6 @@
-QUICK INSTALL
-=============
+This Moodle platform was originally modified for a collaboration with l'École Superieure d'Informatique de Bobo-Dioulasso (Burkina Faso). 
 
-For the impatient, here is a basic outline of the
-installation process, which normally takes me only
-a few minutes:
-
-1) Move the Moodle files into your web directory.
-
-2) Create a single database for Moodle to store all
-   its tables in (or choose an existing database).
-
-3) Visit your Moodle site with a browser, you should
-   be taken to the install.php script, which will lead
-   you through creating a config.php file and then
-   setting up Moodle, creating an admin account etc.
-
-4) Set up a cron task to call the file admin/cron.php
-   every five minutes or so.
-
-
-For more information, see the INSTALL DOCUMENTATION:
-
-   http://docs.moodle.org/en/Installing_Moodle
-
-
-Good luck and have fun!
-Martin Dougiamas, Lead Developer
-
+The main features are the following:
+- UI simplification, by creating a personalized theme which priorizes cleanliness and easy site navigation. 
+- UX improvement, by reducing more used functionallity steps and adding buttons and other easy ways to move through the site.
+- "Template course" local module added. It simplifies the course creation by adding a more abstract layer above the courses. A template course is like a subject structure, only with the skeleton, description and main resources, but without evaluations, dates and any student realted to it. Then, it is possible to instance a course through a template course, just adding an initial and ending date. Then, it looks like a normal moodle course.
