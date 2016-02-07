@@ -69,9 +69,8 @@ class template_course_edit_form extends moodleform {
         $mform->setType('category', PARAM_INT);
         $mform->setDefault('category', $category->id);        
         
-        //DATA = PERIODE
-        $mform->addElement('text', 'idnumber', 'Nombre de mati&egrave;res');
-        $mform->setDefault('idnumber', 8); //provisional number of sections       
+        //Sections
+        $mform->addElement('hidden', 'theme', '1');    
 
         // Description.
         $mform->addElement('header', 'descriptionhdr', get_string('description'));
@@ -80,15 +79,14 @@ class template_course_edit_form extends moodleform {
         $mform->addHelpButton('summary_editor', 'coursesummary');
         $mform->setType('summary_editor', PARAM_RAW);
         
-        // Elements amagats, assignem valors per defecte
-        //$mform->addElement('hidden', 'shortname', '007');
-        $mform->addElement('hidden','idnumber', "");
+        // Hidden elements, we assign default values
+        //$mform->addElement('hidden','idnumber', $course->id); //save template id
+        //$mform->addElement('hidden', 'lang', 'fr');
         $mform->addElement('hidden', 'visible', $courseconfig->hidden);
         $mform->addElement('hidden', 'overviewfiles_filemanager', 0);
         $mform->addElement('hidden', 'format', 'topics');
         $mform->addElement('hidden', 'numsections', 0);
         $mform->addElement('hidden', 'addcourseformatoptionshere', 0);
-        $mform->addElement('hidden', 'lang', $courseconfig->lang);
         $mform->addElement('hidden', 'newsitems', 0);
         $mform->addElement('hidden', 'showgrades', 1);
         $mform->addElement('hidden', 'showreports', 1);
@@ -107,11 +105,11 @@ class template_course_edit_form extends moodleform {
             }
         }
         
-        // FINAL. Assignem les dades
+        // FINAL. Assign data
         
         $this->add_action_buttons();
-        //$mform->addElement('hidden', 'id', null);
-        //$mform->setType('id', PARAM_INT);
+        $mform->addElement('hidden', 'id', $course->id);
+        $mform->setType('id', PARAM_INT);
         $this->set_data($course);
     }
         
@@ -145,7 +143,7 @@ class template_course_edit_form extends moodleform {
     function validation($data, $files) {
         global $DB;
 
-        $errors = parent::validation($data, $files);
+        //$errors = parent::validation($data, $files);
 
         // Add field validation check for duplicate shortname.
         if ($course = $DB->get_record('course', array('shortname' => $data['shortname']), '*', IGNORE_MULTIPLE)) {
@@ -153,14 +151,7 @@ class template_course_edit_form extends moodleform {
                 $errors['shortname'] = get_string('shortnametaken', '', $course->fullname);
             }
         }
-        // Add field validation check for duplicate idnumber.
-        /*if (!empty($data['idnumber']) && (empty($data['id']) || $this->course->idnumber != $data['idnumber'])) {
-            if ($course = $DB->get_record('course', array('idnumber' => $data['idnumber']), '*', IGNORE_MULTIPLE)) {
-                if (empty($data['id']) || $course->id != $data['id']) {
-                    $errors['idnumber'] = get_string('courseidnumbertaken', 'error', $course->fullname);
-                }
-            }
-        }*/
+
         $errors = array_merge($errors, enrol_course_edit_validation($data, $this->context));
 
         $courseformat = course_get_format((object)array('format' => $data['format']));
@@ -219,37 +210,72 @@ class instance_course_edit_form extends moodleform {
         $mform->addElement('hidden', 'shortname', get_string('shortnamecourse'));
 
         //category
-        $mform->addElement('hidden', 'category', 1);
+        //$mform->addElement('hidden', 'category', 1);
+        // Verify permissions to change course category or keep current.
+        if (empty($course->id)) {
+            if (has_capability('moodle/course:create', $categorycontext)) {
+                $displaylist = coursecat::make_categories_list('moodle/course:create');
+                $mform->addElement('select', 'category', get_string('coursecategory'), $displaylist);
+                $mform->addHelpButton('category', 'coursecategory');
+                $mform->setDefault('category', $category->id);
+            } else {
+                $mform->addElement('hidden', 'category', null);
+                $mform->setType('category', PARAM_INT);
+                $mform->setConstant('category', $category->id);
+            }
+        } else {
+            if (has_capability('moodle/course:changecategory', $coursecontext)) {
+                $displaylist = coursecat::make_categories_list('moodle/course:create');
+                if (!isset($displaylist[$course->category])) {
+                    //always keep current
+                    $displaylist[$course->category] = coursecat::get($course->category, MUST_EXIST, true)->get_formatted_name();
+                }
+                $mform->addElement('select', 'category', get_string('coursecategory'), $displaylist);
+                $mform->addHelpButton('category', 'coursecategory');
+            } else {
+                //keep current
+                $mform->addElement('hidden', 'category', null);
+                $mform->setType('category', PARAM_INT);
+                $mform->setConstant('category', $course->category);
+            }
+        }
         
         //start date
         $mform->addElement('date_selector', 'startdate', get_string('startdate'));
-        $mform->addHelpButton('startdate', 'startdate');
         $mform->setDefault('startdate', time());
+
+        $days = count_course_days($course->id);
+
+        //duration hint
+        $mform->addHelpButton('duration', 'Rappelez-vous la dur&eacute;e des themes est de: '. $days .' jours');
         
         //end date proposada
         $mform->addElement('date_selector', 'enddate', 'Date de finalisation');
-        $mform->setDefault('enddate', time()+$course->idnumber*7*24*3600);
+        $mform->setDefault('enddate', time()+$days*24*3600);
 
+        //make the course visible
         $mform->addElement('hidden', 'visible', 1);
         
         $this->add_action_buttons();
-        $mform->addElement('hidden', 'id', $course->id);
-        
-        //define number of sections
-        $mform->addElement('hidden', 'idnumber', $course->idnumber);
         $mform->addElement('hidden', 'format', 'topics');
-        
-        $mform->setType('id', PARAM_INT);
+
+        //we need to put an id, so we keep the old one, for the moment
+        $mform->addElement('hidden', 'id', $course->id);
+        $mform->setType('id', PARAM_INT);     
         
         $this->set_data($course);
     }
     
     function definition_after_data() {                
         $mform = $this->_form;
-        $mform->addElement('hidden', 'numsections', $mform->getElementValue('idnumber'));
+        $mform->addElement('hidden', 'numsections', $mform->getElementValue('lang'));
     }
     
     function validation($data, $files) {
+
+        if ( $data['startdate'] >= $data['enddate']) {
+            $errors['enddate'] = get_string('La date de finalisation dois etre plus tard que la de d&eacute;but.');
+        }
           
         $errors = array_merge($errors, enrol_course_edit_validation($data, $this->context));
 
@@ -258,6 +284,8 @@ class instance_course_edit_form extends moodleform {
         if (!empty($formaterrors) && is_array($formaterrors)) {
             $errors = array_merge($errors, $formaterrors);
         }
+
+        return $errors;
         
     }
     

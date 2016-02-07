@@ -882,16 +882,16 @@ if ($formdata = $mform2->is_cancelled()) {
             if (empty($user->{'course'.$i})) {
                 continue;
             }
-            $shortname = $user->{'course'.$i};
-            if (!array_key_exists($shortname, $ccache)) {
-                if (!$course = $DB->get_record('course', array('shortname'=>$shortname), 'id, shortname')) {
-                    $upt->track('enrolments', get_string('unknowncourse', 'error', s($shortname)), 'error');
+            $courseid = $user->{'course'.$i};
+            if (!array_key_exists($courseid, $ccache)) {
+                if (!$course = $DB->get_record('course', array('id'=>$courseid), 'id, shortname')) {
+                    $upt->track('enrolments', get_string('unknowncourse', 'error', s($courseid)), 'error');
                     continue;
                 }
-                $ccache[$shortname] = $course;
-                $ccache[$shortname]->groups = null;
+                $ccache[$courseid] = $course;
+                $ccache[$courseid]->groups = null;
             }
-            $courseid      = $ccache[$shortname]->id;
+            //$courseid      = $ccache[$courseid]->id;
             $coursecontext = context_course::instance($courseid);
             if (!isset($manualcache[$courseid])) {
                 $manualcache[$courseid] = false;
@@ -923,7 +923,7 @@ if ($formdata = $mform2->is_cancelled()) {
                     role_assign($rid, $user->id, context_course::instance($courseid));
 
                     $a = new stdClass();
-                    $a->course = $shortname;
+                    $a->course = $courseid;
                     $a->role   = $rolecache[$rid]->name;
                     $upt->track('enrolments', get_string('enrolledincourserole', 'enrol_manual', $a));
                 }
@@ -987,7 +987,7 @@ if ($formdata = $mform2->is_cancelled()) {
                     $manual->enrol_user($manualcache[$courseid], $user->id, $rid, $today, $timeend, $status);
 
                     $a = new stdClass();
-                    $a->course = $shortname;
+                    $a->course = $courseid;
                     $a->role   = $rolecache[$rid]->name;
                     $upt->track('enrolments', get_string('enrolledincourserole', 'enrol_manual', $a));
                 }
@@ -1001,41 +1001,41 @@ if ($formdata = $mform2->is_cancelled()) {
                     continue;
                 }
                 //build group cache
-                if (is_null($ccache[$shortname]->groups)) {
-                    $ccache[$shortname]->groups = array();
+                if (is_null($ccache[$courseid]->groups)) {
+                    $ccache[$courseid]->groups = array();
                     if ($groups = groups_get_all_groups($courseid)) {
                         foreach ($groups as $gid=>$group) {
-                            $ccache[$shortname]->groups[$gid] = new stdClass();
-                            $ccache[$shortname]->groups[$gid]->id   = $gid;
-                            $ccache[$shortname]->groups[$gid]->name = $group->name;
+                            $ccache[$courseid]->groups[$gid] = new stdClass();
+                            $ccache[$courseid]->groups[$gid]->id   = $gid;
+                            $ccache[$courseid]->groups[$gid]->name = $group->name;
                             if (!is_numeric($group->name)) { // only non-numeric names are supported!!!
-                                $ccache[$shortname]->groups[$group->name] = new stdClass();
-                                $ccache[$shortname]->groups[$group->name]->id   = $gid;
-                                $ccache[$shortname]->groups[$group->name]->name = $group->name;
+                                $ccache[$courseid]->groups[$group->name] = new stdClass();
+                                $ccache[$courseid]->groups[$group->name]->id   = $gid;
+                                $ccache[$courseid]->groups[$group->name]->name = $group->name;
                             }
                         }
                     }
                 }
                 // group exists?
                 $addgroup = $user->{'group'.$i};
-                if (!array_key_exists($addgroup, $ccache[$shortname]->groups)) {
+                if (!array_key_exists($addgroup, $ccache[$courseid]->groups)) {
                     // if group doesn't exist,  create it
                     $newgroupdata = new stdClass();
                     $newgroupdata->name = $addgroup;
-                    $newgroupdata->courseid = $ccache[$shortname]->id;
+                    $newgroupdata->courseid = $ccache[$courseid]->id;
                     $newgroupdata->description = '';
                     $gid = groups_create_group($newgroupdata);
                     if ($gid){
-                        $ccache[$shortname]->groups[$addgroup] = new stdClass();
-                        $ccache[$shortname]->groups[$addgroup]->id   = $gid;
-                        $ccache[$shortname]->groups[$addgroup]->name = $newgroupdata->name;
+                        $ccache[$courseid]->groups[$addgroup] = new stdClass();
+                        $ccache[$courseid]->groups[$addgroup]->id   = $gid;
+                        $ccache[$courseid]->groups[$addgroup]->name = $newgroupdata->name;
                     } else {
                         $upt->track('enrolments', get_string('unknowngroup', 'error', s($addgroup)), 'error');
                         continue;
                     }
                 }
-                $gid   = $ccache[$shortname]->groups[$addgroup]->id;
-                $gname = $ccache[$shortname]->groups[$addgroup]->name;
+                $gid   = $ccache[$courseid]->groups[$addgroup]->id;
+                $gname = $ccache[$courseid]->groups[$addgroup]->name;
 
                 try {
                     if (groups_add_member($gid, $user->id)) {

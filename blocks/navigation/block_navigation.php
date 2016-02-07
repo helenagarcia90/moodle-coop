@@ -209,6 +209,16 @@ class block_navigation extends block_base {
         // Set content generated to true so that we know it has been done
         $this->contentgenerated = true;
 
+        global $PAGE, $CFG;
+
+        //sujets link
+        if(has_capability('moodle/course:create', $PAGE->context)){
+            $this->content->text .= '<ul class="block_tree list><li class=" type_setting="" depth_1="" item_with_icon"="">';
+            $this->content->text .= '<a href="' . $CFG->wwwroot . '/local/template_course/index.php">';
+            $this->content->text .= '<img alt="" class="smallicon navicon" title="" src="' . $CFG->wwwroot . '/theme/image.php/formfactor/core/1404983571/i/navigationitem"/>';
+            $this->content->text .= 'Matières</a></li></ul>';
+        }
+
         return $this->content;
     }
 

@@ -51,7 +51,8 @@ $THEME->sheets = array(
     'core',
     'course',
     'mods',
-    'blocks'
+    'blocks',
+    'hide'
 );
 
 // Do you want to use the new navigation dock?
@@ -171,7 +172,7 @@ $THEME->layouts = array(
     ),
     // The pagelayout used for reports.
     'report' => array(
-        'file' => 'report.php',
+        'file' => 'general.php',
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),

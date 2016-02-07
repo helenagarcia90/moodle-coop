@@ -245,7 +245,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
             return self::$coursecat0;
         }
         $coursecatrecordcache = cache::make('core', 'coursecatrecords');
-        $coursecat = $coursecatrecordcache->get($id);
+        $coursecat = false; //$coursecatrecordcache->get($id);
         if ($coursecat === false) {
             if ($records = self::get_records('cc.id = :id', array('id' => $id))) {
                 $record = reset($records);
@@ -925,9 +925,9 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
         }
 
         // Preload course contacts if necessary.
-        if (!empty($options['coursecontacts'])) {
+        /*if (!empty($options['coursecontacts'])) {
             self::preload_course_contacts($list);
-        }
+        }*/
         return $list;
     }
 
@@ -1422,7 +1422,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
                 $records = self::get_course_records("c.id ". $sql, $params, $options);
                 // Preload course contacts if necessary - saves DB queries later to do it for each course separately.
                 if (!empty($options['coursecontacts'])) {
-                    self::preload_course_contacts($records);
+                    //self::preload_course_contacts($records);
                 }
                 // If option 'idonly' is specified no further action is needed, just return list of ids.
                 if (!empty($options['idonly'])) {
@@ -1465,7 +1465,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
             }
             // Preload course contacts if necessary - saves DB queries later to do it for each course separately.
             if (!empty($options['coursecontacts'])) {
-                self::preload_course_contacts($list);
+                //self::preload_course_contacts($list);
             }
             // If option 'idonly' is specified no further action is needed, just return list of ids.
             if (!empty($options['idonly'])) {
@@ -2132,6 +2132,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
             $sql = "SELECT cc.id, cc.sortorder, cc.name, cc.visible, cc.parent, cc.path, $ctxselect
                     FROM {course_categories} cc
                     JOIN {context} ctx ON cc.id = ctx.instanceid AND ctx.contextlevel = :contextcoursecat
+                    WHERE cc.id > 0
                     ORDER BY cc.sortorder";
             $rs = $DB->get_recordset_sql($sql, array('contextcoursecat' => CONTEXT_COURSECAT));
             $baselist = array();

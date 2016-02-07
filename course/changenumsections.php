@@ -28,36 +28,58 @@
 require_once(dirname(__FILE__).'/../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 
+$PAGE->set_url('/course/changenumsections.php', array('courseid' => $courseid));
+
+
 $courseid = required_param('courseid', PARAM_INT);
-$increase = optional_param('increase', true, PARAM_BOOL);
+$sectionid = required_param('sectionid', PARAM_INT);
+$delete = optional_param('delete', 0, PARAM_INT);
+$increase = optional_param('increase', false, PARAM_BOOL);
+$activity = optional_param('activity', false, PARAM_BOOL);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $courseformatoptions = course_get_format($course)->get_format_options();
 
-$PAGE->set_url('/course/changenumsections.php', array('courseid' => $courseid));
+$PAGE->set_url('/local/template_course/changenumsections.php', array('courseid' => $courseid, 'sesskey' => sesskey()));
 
 // Authorisation checks.
 require_login($course);
 require_capability('moodle/course:update', context_course::instance($course->id));
 require_sesskey();
 
-if (isset($courseformatoptions['numsections'])) {
-    if ($increase) {
+global $DB;
+
+ if ($increase) {
         // Add an additional section.
         $courseformatoptions['numsections']++;
-    } else {
+        $cw = new stdClass();
+        $cw->course   = $courseid;
+        $cw->section  = $sectionid;
+        $cw->summary  = '';
+        $cw->summaryformat = FORMAT_HTML;
+        $cw->sequence = '';
+        if($activity){
+            $cw->name = "Évaluation";
+            $cw->showavailability = 1;
+        }
+
+        $id = $DB->insert_record("course_sections", $cw);
+        
+ } else if($delete && isset($courseformatoptions['numsections'])){
+        $sec = $DB->get_record('course_sections',array('course' => $courseid, 'section' => $sectionid));
+        $DB->delete_records('course_sections',array('course' => $courseid, 'section' => $sectionid));
+        $DB->delete_records('event', array('courseid' => $courseid, 'instance' => $sec->id/*, 'eventtype'=>'section'*/ ) );
         // Remove a section.
         $courseformatoptions['numsections']--;
-    }
+ }
 
-    // Don't go less than 0, intentionally redirect silently (for the case of
-    // double clicks).
-    if ($courseformatoptions['numsections'] >= 0) {
-        course_get_format($course)->update_course_format_options(
-                array('numsections' => $courseformatoptions['numsections']));
-    }
-}
+ // Don't go less than 0, intentionally redirect silently (for the case of
+ // double clicks).
+ if ($courseformatoptions['numsections'] >= 0) {
+     //var_dump( course_get_format($course));
+     course_get_format($course)->update_course_format_options(
+             array('numsections' => $courseformatoptions['numsections']));
+ }
 
-$url = course_get_url($course);
-$url->set_anchor('changenumsections');
+$url = new moodle_url("/course/view.php", array('id'=> $course->id, 'sesskey' => sesskey()));
 // Redirect to where we were..
 redirect($url);

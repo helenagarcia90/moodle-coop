@@ -34,6 +34,12 @@
 
     $course = $DB->get_record('course', $params, '*', MUST_EXIST);
 
+    ////////////////////////////////
+    if($course->category == -1){
+        redirect(new moodle_url("/local/template_course/view.php", array(id => $course->id, sesskey => sesskey())));
+    }
+    ///////////////////////////////
+    
     $urlparams = array('id' => $course->id);
 
     // Sectionid should get priority over section number
@@ -66,7 +72,7 @@
         // is this role assignable in this context?
         // inquiring minds want to know...
         $aroles = get_switchable_roles($context);
-        if (is_array($aroles) && isset($aroles[$switchrole])) {
+            if (is_array($aroles) && isset($aroles[$switchrole])) {
             role_switch($switchrole, $context);
             // Double check that this role is allowed here
             require_login($course);
@@ -176,11 +182,14 @@
                 redirect($PAGE->url);
             }
         }
+
         if (($modchooser == 1) && confirm_sesskey()) {
             set_user_preference('usemodchooser', $modchooser);
         } else if (($modchooser == 0) && confirm_sesskey()) {
             set_user_preference('usemodchooser', $modchooser);
         }
+
+        //set_user_preference('usemodchooser', 0);
 
         if (has_capability('moodle/course:sectionvisibility', $context)) {
             if ($hide && confirm_sesskey()) {
@@ -198,6 +207,30 @@
                 has_capability('moodle/course:movesections', $context) && confirm_sesskey()) {
             $destsection = $section + $move;
             if (move_section_to($course, $section, $destsection)) {
+                
+                //update events of course sections
+                $DB->delete_records('event', array('courseid'=>$course->id)); //delete old ones
+                $sections = $DB->get_records('course_sections', array('course'=>$course->id));
+                foreach ($sections as $sec){
+                    if($sec->section > 0){
+                        $event = new stdClass;
+                        $event->name         = $sec->name .' du course '.$course->shortname;
+                        $event->description  = '';
+                        $event->courseid     = $course->id;
+                        $event->groupid      = 0;
+                        $event->userid       = 0;
+                        $event->modulename   = '';
+                        $event->instance     = $sec->id;
+                        $event->eventtype    = 'section';
+                        $date = usergetdate(time());
+                        list($d, $m, $y) = array($date['mday'], $date['mon'], $date['year']);            
+                        $event->timestart    = $sec->availablefrom;
+                        $event->visible      = 1;
+                        $event->timeduration = ($sec->availableuntil-$sec->availablefrom);
+                        $DB->insert_record('event', $event, true, false);
+                    }
+                }
+
                 if ($course->id == SITEID) {
                     redirect($CFG->wwwroot . '/?redirect=0');
                 } else {
@@ -289,6 +322,23 @@
     // Content wrapper end.
 
     echo html_writer::end_tag('div');
+
+    // End buttons:
+
+    if(has_capability('moodle/course:create', $PAGE->context)){
+        echo $OUTPUT->single_button(new moodle_url('/grade/export/xls/index.php',
+        array('id'=>$course->id)), 'Télécharger les notes dans XLS', 'get');
+
+        /*echo $OUTPUT->single_button(new moodle_url('/admin/tool/uploaduser/index.php', 
+        array()), 'Inscrire étudiants par fichier', 'get');*/
+
+        echo $OUTPUT->single_button(new moodle_url('/enrol/users.php', 
+        array('id'=>$course->id)), 'Inscrire étudiants', 'get');
+    }
+    else { 
+        echo $OUTPUT->single_button(new moodle_url('/courses/', 
+        array('id'=>$course->id)), 'Retourner aux courses', 'get');
+    }
 
     // Include course AJAX
     include_course_ajax($course, $modnamesused);

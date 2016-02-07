@@ -491,13 +491,16 @@ class core_course_renderer extends plugin_renderer_base {
         }
 
         if (!empty($activities[MOD_CLASS_RESOURCE])) {
-            $select = new url_select($activities[MOD_CLASS_RESOURCE], '', array(''=>$straddresource), "ressection$section");
+            $select = new url_select($activities[MOD_CLASS_RESOURCE], '', array(''=>$straddresource), "section$section");
             $select->set_help_icon('resources');
             $select->set_label($strresourcelabel, array('class' => 'accesshide'));
             $output .= $this->output->render($select);
         }
 
-        if (!empty($activities[MOD_CLASS_ACTIVITY])) {
+        global $DB;
+
+        //$sec = $DB->get_record('course_sections', array('course'=>$course->id, 'section'=>$section), '*', MUST_EXIST );
+        if (!empty($activities[MOD_CLASS_ACTIVITY]) /*&& $sec->showavailability==1*/) {
             $select = new url_select($activities[MOD_CLASS_ACTIVITY], '', array(''=>$straddactivity), "section$section");
             $select->set_help_icon('activities');
             $select->set_label($stractivitylabel, array('class' => 'accesshide'));
@@ -1084,6 +1087,7 @@ class core_course_renderer extends plugin_renderer_base {
             $movingpix = new pix_icon('movehere', get_string('movehere'), 'moodle', array('class' => 'movetarget'));
             $strmovefull = strip_tags(get_string("movefull", "", "'$USER->activitycopyname'"));
         }
+        //var_dump($modinfo);
 
         // Get the list of modules visible to user (excluding the module being moved if there is one)
         $moduleshtml = array();
@@ -1406,15 +1410,17 @@ class core_course_renderer extends plugin_renderer_base {
 
         $coursecount = 0;
         foreach ($courses as $course) {
-            $coursecount ++;
-            $classes = ($coursecount%2) ? 'odd' : 'even';
-            if ($coursecount == 1) {
-                $classes .= ' first';
+            if($course->category > 0) {
+                $coursecount ++;
+                $classes = ($coursecount%2) ? 'odd' : 'even';
+                if ($coursecount == 1) {
+                    $classes .= ' first';
+                }
+                if ($coursecount >= count($courses)) {
+                    $classes .= ' last';
+                }
+                $content .= $this->coursecat_coursebox($chelper, $course, $classes);
             }
-            if ($coursecount >= count($courses)) {
-                $classes .= ' last';
-            }
-            $content .= $this->coursecat_coursebox($chelper, $course, $classes);
         }
 
         if (!empty($pagingbar)) {
@@ -1486,7 +1492,9 @@ class core_course_renderer extends plugin_renderer_base {
         }
 
         foreach ($subcategories as $subcategory) {
-            $content .= $this->coursecat_category($chelper, $subcategory, $depth + 1);
+            if($subcategory->id > 0){
+                $content .= $this->coursecat_category($chelper, $subcategory, $depth + 1);
+            } 
         }
 
         if (!empty($pagingbar)) {
@@ -1765,7 +1773,7 @@ class core_course_renderer extends plugin_renderer_base {
         // Add action buttons
         $output .= $this->container_start('buttons');
         $context = get_category_or_system_context($coursecat->id);
-        if (has_capability('moodle/course:create', $context)) {
+        /*if (has_capability('moodle/course:create', $context)) {
             // Print link to create a new course, for the 1st available category.
             if ($coursecat->id) {
                 $url = new moodle_url('/course/edit.php', array('category' => $coursecat->id, 'returnto' => 'category'));
@@ -1773,7 +1781,7 @@ class core_course_renderer extends plugin_renderer_base {
                 $url = new moodle_url('/course/edit.php', array('category' => $CFG->defaultrequestcategory, 'returnto' => 'topcat'));
             }
             $output .= $this->single_button($url, get_string('addnewcourse'), 'get');
-        }
+        }*/
         ob_start();
         if (coursecat::count_all() == 1) {
             print_course_request_buttons(context_system::instance());
@@ -1942,7 +1950,7 @@ class core_course_renderer extends plugin_renderer_base {
      * Returns HTML to display one remote course
      *
      * @param stdClass $course remote course information, contains properties:
-           id, remoteid, shortname, fullname, hostid, summary, summaryformat, cat_name, hostname
+     *      id, remoteid, shortname, fullname, hostid, summary, summaryformat, cat_name, hostname
      * @return string
      */
     protected function frontpage_remote_course(stdClass $course) {
@@ -2091,10 +2099,10 @@ class core_course_renderer extends plugin_renderer_base {
         $chelper->set_attributes(array('class' => 'frontpage-course-list-all'));
         $courses = coursecat::get(0)->get_courses($chelper->get_courses_display_options());
         $totalcount = coursecat::get(0)->get_courses_count($chelper->get_courses_display_options());
-        if (!$totalcount && !$this->page->user_is_editing() && has_capability('moodle/course:create', context_system::instance())) {
+        /*if (!$totalcount && !$this->page->user_is_editing() && has_capability('moodle/course:create', context_system::instance())) {
             // Print link to create a new course, for the 1st available category.
             return $this->add_new_course_button();
-        }
+        }*/
         return $this->coursecat_courses($chelper, $courses, $totalcount);
     }
 

@@ -564,7 +564,7 @@ function enrol_get_my_courses($fields = NULL, $sort = 'visible DESC,sortorder AS
         $orderby = "ORDER BY $sort";
     }
 
-    $wheres = array("c.id <> :siteid");
+    $wheres = array("c.id <> :siteid AND c.category>0");
     $params = array('siteid'=>SITEID);
 
     if (isset($USER->loginascontext) and $USER->loginascontext->contextlevel == CONTEXT_COURSE) {

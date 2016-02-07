@@ -24,8 +24,6 @@
     $params = array();
     if (!empty($name)) {
         $params = array('shortname' => $name);
-    } else if (!empty($idnumber)) {
-        $params = array('idnumber' => $idnumber);
     } else if (!empty($id)) {
         $params = array('id' => $id);
     }else {
@@ -109,7 +107,7 @@
     // Fix course format if it is no longer installed
     $course->format = course_get_format($course)->get_format();
 
-    $PAGE->set_pagelayout('course');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_pagetype('course-view-' . $course->format);
     $PAGE->set_other_editing_capability('moodle/course:update');
     $PAGE->set_other_editing_capability('moodle/course:manageactivities');
@@ -139,8 +137,10 @@
     if (!isset($USER->editing)) {
         $USER->editing = 0;
     }
-    //if ($PAGE->user_allowed_editing()) {
-        if (confirm_sesskey()) {            
+    
+    $sesskey = sesskey();
+    if ( $PAGE->user_allowed_editing() ) {
+        if (confirm_sesskey($sesskey)) {            
             $USER->editing = 1;        
             set_user_preference('usemodchooser', $modchooser);
         } else {
@@ -178,12 +178,11 @@
                 echo $OUTPUT->notification('An error occurred while moving a section');
             }
         }
-    //} else {
-        //$USER->editing = 0;
-    //}
+    } else {
+        $USER->editing = 0;
+    }
 
     $SESSION->fromdiscussion = $PAGE->url->out(false);
-
 
     if ($course->id == SITEID) {
         // This course is not a real course.
@@ -205,12 +204,12 @@
     // We are currently keeping the button here from 1.x to help new teachers figure out
     // what to do, even though the link also appears in the course admin block.  It also
     // means you can back out of a situation where you removed the admin block. :)
-    /*if ($PAGE->user_allowed_editing()) {
-        $buttons = $OUTPUT->edit_button($PAGE->url); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //if ($PAGE->user_allowed_editing()) {
+        $buttons = $OUTPUT->edit_button($PAGE->url);
         $PAGE->set_button($buttons);
-    }*/
+    //}
     
-    $PAGE->set_title(get_string('course') . ': ' . $course->fullname);
+    $PAGE->set_title('Matière' . ': ' . $course->fullname);
     // If viewing a section, make the title more specific
     if ($section and $section > 0 and course_format_uses_sections($course->format)) {
         // Get section details and check it exists.
@@ -239,7 +238,7 @@
     echo html_writer::start_tag('div', array('class'=>'course-content'));
 
     // make sure that section 0 exists (this function will create one if it is missing)
-    course_create_sections_if_missing($course, 0);
+    //course_create_sections_if_missing($course, 0);
 
     // get information about course modules and existing module types
     // format.php in course formats may rely on presence of these variables
@@ -264,8 +263,11 @@
     // Include course AJAX
     include_course_ajax($course, $modnamesused);
     
-    //boto d'editar
+    //botons
     echo $OUTPUT->single_button(new moodle_url('/local/template_course/edit.php', 
-            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => sesskey())), 'Éditer', 'get');
+            array('id'=>$course->id)), 'Paramètres de la matière', 'get');
+
+    echo $OUTPUT->single_button(new moodle_url('/local/template_course/index.php', 
+            array()), 'Retourner à la liste de matières', 'get');
 
     echo $OUTPUT->footer();

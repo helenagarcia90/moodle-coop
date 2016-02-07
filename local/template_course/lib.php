@@ -14,9 +14,6 @@ require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/course/format/lib.php');
 require_once($CFG->dirroot.'/course/renderer.php');
 
-//string['edittemplatecoursesettings'] = "";
-//string['addnewtemplatecourse'] = "";
-
 /**
  * Returns the list of all editing actions that current user can perform on the module
  *
@@ -37,7 +34,7 @@ function course_get_cm_edit_actions_reduced(cm_info $mod, $indent = -1, $sr = nu
     $editcaps = array('moodle/course:manageactivities', 'moodle/course:activityvisibility', 'moodle/role:assign');
     $dupecaps = array('moodle/backup:backuptargetimport', 'moodle/restore:restoretargetimport');
 
-    // No permission to edit anything.
+    //No permission to edit anything.
     if (!has_any_capability($editcaps, $modcontext) and !has_all_capabilities($dupecaps, $coursecontext)) {
         return array();
     }
@@ -175,5 +172,19 @@ function course_get_cm_edit_actions_reduced(cm_info $mod, $indent = -1, $sr = nu
             unset($this->formatoptions[$sectionid]);
         }
         return $changed;
+    }
+
+    /**
+    *
+    **/
+    function count_course_days($courseid){
+        global $DB;
+        $sections = $DB->get_records('course_sections', array('course'=>$courseid));
+        $total_duration = 0;
+        foreach($sections as $section){
+            $duration=$section->availablefrom;
+            $total_duration+=$duration;
+        }
+        return $total_duration;
     }
 

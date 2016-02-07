@@ -50,6 +50,12 @@ if ($id) {
     require_login($course);
     $course = course_get_format($course)->get_course();
 
+    ////////////////////////////////
+    if($course->category == -1){
+        redirect(new moodle_url("/local/template_course/edit.php", array(id => $course->id, sesskey => sesskey())));
+    }
+    ///////////////////////////////
+
     $category = $DB->get_record('course_categories', array('id'=>$course->category), '*', MUST_EXIST);
     $coursecontext = context_course::instance($course->id);
     require_capability('moodle/course:update', $coursecontext);

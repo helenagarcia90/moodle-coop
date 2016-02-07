@@ -75,7 +75,7 @@ if ($mform->is_cancelled()){
         $data->section = $sectionnum;
     }
     // Trigger an event for course section update.
-    $event = \core\event\course_section_updated::create(
+    /*$event = \core\event\course_section_updated::create(
             array(
                 'objectid' => $data->id,
                 'courseid' => $course->id,
@@ -83,9 +83,19 @@ if ($mform->is_cancelled()){
                 'other' => array('sectionnum' => $data->section)
             )
         );
-    $event->trigger();
+    $event->trigger();*/
+
+    require_once($CFG->dirroot. '/calendar/lib.php');
+
+    /*if($existentevent = $DB->get_record('event', array('courseid' =>$course->id, 'instance' => $data->section))){
+        $event->id = $existentevent->id;
+        $DB->update_record('event', $event);
+    }else{
+        calendar_event::create($event);
+    }*/
 
     $PAGE->navigation->clear_cache();
+
     redirect(course_get_url($course, $section, array('sr' => $sectionreturn)));
 }
 

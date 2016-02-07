@@ -82,20 +82,14 @@ class format_template_section_renderer extends format_section_renderer_base {
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
 
+        //We want to save the last section, for adding a new one
+        $lastsection = 0;
+        
         // Now the list of sections..
         echo $this->start_section_list();
-
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
-            if ($section == 0) {
-                // 0-section is displayed a little different then the others
-                if ($thissection->summary or !empty($modinfo->sections[0]) or $PAGE->user_is_editing()) {
-                    echo $this->section_header($thissection, $course, false, 0);
-                    echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
-                    echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-                    echo $this->section_footer();
-                }
-                continue;
-            }
+            if ($section == 0) { continue; }
+
             // Show the section if the user is permitted to access it, OR if it's not available
             // but showavailability is turned on (and there is some available info text).
             $showsection = $thissection->uservisible ||
@@ -107,7 +101,6 @@ class format_template_section_renderer extends format_section_renderer_base {
                 if (!$course->hiddensections && $thissection->available) {
                     echo $this->section_hidden($section);
                 }
-
                 continue;
             }
 
@@ -122,9 +115,9 @@ class format_template_section_renderer extends format_section_renderer_base {
                 }
                 echo $this->section_footer();
             }
+            $lastsection = $section;
         }
-
-        if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
+        if ( $PAGE->user_is_editing() and has_capability('moodle/course:update', $context) ) {
             // Print stealth sections if present.
             foreach ($modinfo->get_section_info_all() as $section => $thissection) {
                 if ($section <= $course->numsections or empty($modinfo->sections[$section])) {
@@ -134,37 +127,112 @@ class format_template_section_renderer extends format_section_renderer_base {
                 echo $this->stealth_section_header($section);
                 echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                 echo $this->stealth_section_footer();
+                $lastsection = $section;
             }
 
             echo $this->end_section_list();
 
-            echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
-
+            echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-left'));
+            
             // Increase number of sections.
-            $straddsection = get_string('increasesections', 'moodle');
+            $straddsection = 'Ajouter une section';
+            $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
             $url = new moodle_url('changenumsections.php',
                 array('courseid' => $course->id,
                       'increase' => true,
-                      'sesskey' => sesskey()));
-            $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1));
+            echo html_writer::span($straddsection." ");
             echo html_writer::link($url, $icon.get_accesshide($straddsection), array('class' => 'increase-sections'));
+            
+            echo '<br/>';
 
-            if ($course->numsections > 0) {
-                // Reduce number of sections sections.
-                $strremovesection = get_string('reducesections', 'moodle');
-                $url = new moodle_url('changenumsections.php',
-                    array('courseid' => $course->id,
-                          'increase' => false,
-                          'sesskey' => sesskey()));
-                $icon = $this->output->pix_icon('t/switch_minus', $strremovesection);
-                echo html_writer::link($url, $icon.get_accesshide($strremovesection), array('class' => 'reduce-sections'));
-            }
-
+            // add an activity (section with name activity, not visible)
+            /*$url = new moodle_url('changenumsections.php',
+                array('courseid' => $course->id,
+                      'increase' => true,
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1,
+                      'activity' => true ));
+            $straddactivity = 'Ajouter une &eacute;valuation';
+            $icon = $this->output->pix_icon('t/switch_plus', $straddactivity);
+            echo html_writer::span($straddactivity." ");
+            echo html_writer::link($url, $icon.get_accesshide($straddactivity), array('class' => 'increase-sections'));
+            */
             echo html_writer::end_tag('div');
+
         } else {
             echo $this->end_section_list();
         }
 
+    }
+    
+    /**
+     * Generate the display of the header part of a section before
+     * course modules are included
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course The course entry from DB
+     * @param bool $onsectionpage true if being printed on a single-section page
+     * @param int $sectionreturn The section to return to after an action
+     * @return string HTML to output.
+     */
+    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
+        global $PAGE;
+
+        $o = '';
+        $currenttext = '';
+        $sectionstyle = '';
+
+        if ($section->section != 0) {
+            // Only in the non-general sections.
+            if (!$section->visible) {
+                $sectionstyle = ' hidden';
+            } else if (course_get_format($course)->is_section_current($section)) {
+                $sectionstyle = ' current';
+            }
+        }
+
+        $o.= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
+            'class' => 'section main clearfix'.$sectionstyle, 'role'=>'region',
+            'aria-label'=> get_section_name($course, $section)));
+
+        $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag('div', $leftcontent, array('class' => 'left side'));
+
+        $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag('div', $rightcontent, array('class' => 'right side'));
+        $o.= html_writer::start_tag('div', array('class' => 'content'));
+
+        // When not on a section page, we display the section titles except the general section if null
+        $hasnamenotsecpg = (!$onsectionpage && ($section->section != 0 || !is_null($section->name)));
+
+        // When on a section page, we only display the general section title, if title is not the default one
+        $hasnamesecpg = ($onsectionpage && ($section->section == 0 && !is_null($section->name)));
+
+        $classes = ' accesshide';
+        if ($hasnamenotsecpg || $hasnamesecpg) {
+            $classes = '';
+        }
+        $o.= $this->output->heading($this->section_title($section, $course), 3, 'sectionname' . $classes);
+
+        $o.= html_writer::start_tag('div', array('class' => 'summary'));
+        $o.= $this->format_summary_text($section);
+
+        $context = context_course::instance($course->id);
+        if ($PAGE->user_is_editing() && has_capability('moodle/course:update', $context) ) {
+            $url = new moodle_url('format/editsection.php', array('id'=>$section->id, 'sr'=>$sectionreturn));
+            $o.= html_writer::link($url,
+                html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/settings'),
+                    'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
+                array('title' => get_string('editsummary')));
+        }
+        $o.= html_writer::end_tag('div');
+
+        $o .= $this->section_availability_message($section,
+                has_capability('moodle/course:viewhiddensections', $context));
+
+        return $o;
     }
     
 }

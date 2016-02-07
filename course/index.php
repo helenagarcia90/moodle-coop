@@ -30,6 +30,12 @@ require_once($CFG->libdir. '/coursecatlib.php');
 $categoryid = optional_param('categoryid', 0, PARAM_INT); // Category id
 $site = get_site();
 
+//////////////////////////////
+if ($categoryid == -1) {
+    redirect(new moodle_url("/local/template_course/index.php"));
+}
+//////////////////////////////
+
 if ($categoryid) {
     $PAGE->set_category_by_id($categoryid);
     $PAGE->set_url(new moodle_url('/course/index.php', array('categoryid' => $categoryid)));
@@ -37,7 +43,8 @@ if ($categoryid) {
     // And the object has been loaded for us no need for another DB call
     $category = $PAGE->category;
 } else {
-    $categoryid = 0;
+    $categoryid=1;
+    $category = $DB->get_record('course_categories', array('id'=>$categoryid), '*', MUST_EXIST); 
     $PAGE->set_url('/course/index.php');
     $PAGE->set_context(context_system::instance());
 }

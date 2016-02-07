@@ -311,29 +311,31 @@ if (!isset($hiddenfields['mycourses'])) {
         $shown = 0;
         $courselisting = '';
         foreach ($mycourses as $mycourse) {
-            if ($mycourse->category) {
-                context_helper::preload_from_record($mycourse);
-                $ccontext = context_course::instance($mycourse->id);
-                $cfullname = $ccontext->get_context_name(false);
-                if ($mycourse->id != $course->id){
-                    $class = '';
-                    if ($mycourse->visible == 0) {
-                        if (!has_capability('moodle/course:viewhiddencourses', $ccontext)) {
-                            continue;
+            if($mycourse->category > 0) {
+                if ($mycourse->category) {
+                    context_helper::preload_from_record($mycourse);
+                    $ccontext = context_course::instance($mycourse->id);
+                    $cfullname = $ccontext->get_context_name(false);
+                    if ($mycourse->id != $course->id){
+                        $class = '';
+                        if ($mycourse->visible == 0) {
+                            if (!has_capability('moodle/course:viewhiddencourses', $ccontext)) {
+                                continue;
+                            }
+                            $class = 'class="dimmed"';
                         }
-                        $class = 'class="dimmed"';
+                        $courselisting .= "<a href=\"{$CFG->wwwroot}/user/view.php?id={$user->id}&amp;course={$mycourse->id}\" $class >"
+                            . $cfullname . "</a>, ";
+                    } else {
+                        $courselisting .= $cfullname . ", ";
+                        $PAGE->navbar->add($cfullname);
                     }
-                    $courselisting .= "<a href=\"{$CFG->wwwroot}/user/view.php?id={$user->id}&amp;course={$mycourse->id}\" $class >"
-                        . $cfullname . "</a>, ";
-                } else {
-                    $courselisting .= $cfullname . ", ";
-                    $PAGE->navbar->add($cfullname);
                 }
-            }
-            $shown++;
-            if ($shown >= 20) {
-                $courselisting .= "...";
-                break;
+                $shown++;
+                if ($shown >= 20) {
+                    $courselisting .= "...";
+                    break;
+                }
             }
         }
         echo html_writer::tag('dt', get_string('courseprofiles'));

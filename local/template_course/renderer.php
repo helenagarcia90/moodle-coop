@@ -36,7 +36,7 @@ class template_course_renderer extends core_course_renderer {
         
         $coursecat = coursecat::get(is_object($category) ? $category->id : $category);
         $site = get_site();
-        $output = '';
+        $output = '<h2>Matières</h2>';
 
         // Print current category description
         $chelper = new coursecat_helper();
@@ -96,10 +96,10 @@ class template_course_renderer extends core_course_renderer {
         $output .= $this->container_start('buttons');
         $context = get_category_or_system_context($coursecat->id);
         
-        //if (has_capability('moodle/local/template_course:create', $context)) { !!!!!!!!!!!
+        if (has_capability('moodle/course:create', $context)) {
             $url = new moodle_url('/local/template_course/edit.php', array('returnto' => 'category', 'edit' => 'on'));
-            $output .= $this->single_button($url, get_string('addnewcourse'), 'get');
-        //}
+            $output .= $this->single_button($url, 'Ajouter une nouvelle matière', 'get');
+        }
         
         ob_start();
         if (coursecat::count_all() == 1) {
@@ -387,9 +387,12 @@ class template_course_renderer extends core_course_renderer {
         $coursenamelink = html_writer::link( new moodle_url('/local/template_course/view.php', array('id' => $course->id, 'sesskey' => $USER->sesskey) ),
                                             $coursename, array('class' => $course->visible ? '' : 'dimmed'));
         $content .= html_writer::tag($nametag, $coursenamelink, array('class' => 'coursename'));
+        $content .= html_writer::link(new moodle_url('/local/template_course/instance.php', 
+                    array('id' => $course->id, 'sesskey' => sesskey() )), 'Creer Course', array() );
+        
         // If we display course in collapsed form but the course has summary or course contacts, display the link to the info page.
         $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
-        /*if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
+        if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
             if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
                 $url = new moodle_url('/course/info.php', array('id' => $course->id));
                 $image = html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/info'),
@@ -398,7 +401,7 @@ class template_course_renderer extends core_course_renderer {
                 // Make sure JS file to expand course content is included.
                 $this->coursecat_include_js();
             }
-        }*/
+        }            
         $content .= html_writer::end_tag('div'); // .moreinfo
 
         // print enrolmenticons
@@ -578,13 +581,13 @@ class template_course_renderer extends core_course_renderer {
             $output .= html_writer::start_tag('div', array('class' => 'horizontal'));
         }
 
-        /*if (!empty($activities[MOD_CLASS_RESOURCE])) {
-            $select = new url_select($activities[MOD_CLASS_RESOURCE], '', array(''=>$straddresource), "ressection$section");
-            $select->set_help_icon('resources');
-            $select->set_label($strresourcelabel, array('class' => 'accesshide'));
-            $output .= $this->output->render($select);
-        }*/
-
+        if (!empty($activities[MOD_CLASS_RESOURCE])) {
+            $url = new moodle_url('/course/modedit.php', array('add'=>'resource', 'type'=>'', 'course'=>$course->id, 'section'=>$section, 
+                'return'=>0, 'sr'=>0));
+            $link = html_writer::link($url, $straddresource);
+            $output .= ($link);
+        }
+        /* Helena */
         /*if (!empty($activities[MOD_CLASS_ACTIVITY])) {
             $select = new url_select($activities[MOD_CLASS_ACTIVITY], '', array(''=>$straddactivity), "section$section");
             $select->set_help_icon('activities');
@@ -611,7 +614,7 @@ class template_course_renderer extends core_course_renderer {
             $modchooser.= html_writer::end_tag('div');
 
             // Wrap the normal output in a noscript div
-            /*$usemodchooser = get_user_preferences('usemodchooser', $CFG->modchooserdefault);
+            $usemodchooser = get_user_preferences('usemodchooser', $CFG->modchooserdefault);
             if ($usemodchooser) {
                 $output = html_writer::tag('div', $output, array('class' => 'hiddenifjs addresourcedropdown'));
                 $modchooser = html_writer::tag('div', $modchooser, array('class' => 'visibleifjs addresourcemodchooser'));
@@ -620,7 +623,7 @@ class template_course_renderer extends core_course_renderer {
                 $output = html_writer::tag('div', $output, array('class' => 'show addresourcedropdown'));
                 $modchooser = html_writer::tag('div', $modchooser, array('class' => 'hide addresourcemodchooser'));
             }
-            $output = $this->course_modchooser($modules, $course) . $modchooser . $output;*/
+            $output = $this->course_modchooser($modules, $course) . $modchooser . $output;
         }
 
         return $output;

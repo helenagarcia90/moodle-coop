@@ -28,8 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir.'/filelib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
+$topic = optional_param('topic', 0, PARAM_INT);
+$edited = optional_param('edited', false, PARAM_BOOL);  
+
 // Horrible backwards compatible parameter aliasing..
-if ($topic = optional_param('topic', 0, PARAM_INT)) {
+if ($topic) {
     $url = $PAGE->url;
     $url->param('section', $topic);
     debugging('Outdated topic param passed to course/view.php', DEBUG_DEVELOPER);
@@ -46,7 +49,9 @@ if (($marker >=0) && has_capability('moodle/course:setcurrentsection', $context)
 
 // make sure all sections are created
 $course = course_get_format($course)->get_course();
-course_create_sections_if_missing($course, range(0, $course->numsections));
+if($edited){
+    course_create_sections_if_missing($course, range(0, $course->numsections));
+}
 require('templateformatrenderer.php');
 $renderer = new format_template_section_renderer($PAGE);
 
@@ -57,4 +62,4 @@ if (!empty($displaysection)) {
 }
 
 // Include course format js module
-$PAGE->requires->js('/course/format/topics/format.js');
+$PAGE->requires->js('/local/template_course/format/format.js');

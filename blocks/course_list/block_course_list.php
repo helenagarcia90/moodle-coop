@@ -33,7 +33,7 @@ class block_course_list extends block_list {
            }
         }
 
-        if (empty($CFG->disablemycourses) and isloggedin() and !isguestuser() and
+        /*if (empty($CFG->disablemycourses) and isloggedin() and !isguestuser() and
           !(has_capability('moodle/course:update', context_system::instance()) and $adminseesall)) {    // Just print My Courses
             // As this is producing navigation sort order should default to $CFG->navsortmycoursessort instead
             // of using the default.
@@ -59,21 +59,24 @@ class block_course_list extends block_list {
             if ($this->content->items) { // make sure we don't return an empty list
                 return $this->content;
             }
-        }
+        }*/
 
         $categories = coursecat::get(0)->get_children();  // Parent = 0   ie top-level categories only
         if ($categories) {   //Check we have categories
             if (count($categories) > 1 || (count($categories) == 1 && $DB->count_records('course') > 200)) {     // Just print top level category links
                 foreach ($categories as $category) {
-                    $categoryname = $category->get_formatted_name();
-                    $linkcss = $category->visible ? "" : " class=\"dimmed\" ";
-                    $this->content->items[]="<a $linkcss href=\"$CFG->wwwroot/course/index.php?categoryid=$category->id\">".$icon . $categoryname . "</a>";
+                    if($category->id > 0 || has_capability('moodle/course:create', context_system::instance())){
+                        $categoryname = $category->get_formatted_name();
+                        $linkcss = $category->visible ? "" : " class=\"dimmed\" ";
+                        $this->content->items[]="<a $linkcss href=\"$CFG->wwwroot/course/index.php?categoryid=$category->id\">".$icon . $categoryname . "</a>";
+                    }
                 }
             /// If we can update any course of the view all isn't hidden, show the view all courses link
                 if (has_capability('moodle/course:update', context_system::instance()) || empty($CFG->block_course_list_hideallcourseslink)) {
                     $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">".get_string('fulllistofcourses').'</a> ...';
                 }
-                $this->title = get_string('categories');
+                //$this->title = get_string('categories');
+                $this->title = "Seméstres";
             } else {                          // Just print course names of single category
                 $category = array_shift($categories);
                 $courses = get_courses($category->id);

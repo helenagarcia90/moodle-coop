@@ -264,12 +264,11 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
                 $str->delete,
                 array('class' => 'editing_delete', 'data-action' => 'delete')
             );*/
-            $url = clone($baseurl);
-            $url->param('delete',  $section->section);
+            $url = 'changenumsections.php?delete=1&courseid='.$course->id.'&sectionid='.$section->section.'&sesskey='.  sesskey();
             $controls[] = html_writer::link($url,
-                    html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/down'),
-                    'class' => 'delete', 'alt' => $strhidefromothers)),
-                    array('title' => $strhidefromothers, 'class' => 'delete'));
+                    html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/invalid'),
+                    'class' => 'delete', 'alt' => 'eliminer')),
+                    array('title' => 'Eliminer', 'class' => 'delete'));
         }
 
         if (!$onsectionpage && has_capability('moodle/course:movesections', $coursecontext)) {
@@ -733,6 +732,9 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
 
+        //We want to save the last section, for adding a new one
+        $lastsection = 0;
+
         // Now the list of sections..
         echo $this->start_section_list();
 
@@ -773,6 +775,7 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
                 }
                 echo $this->section_footer();
             }
+            $lastsection = $section;
         }
 
         if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
@@ -792,25 +795,30 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
             echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
 
             // Increase number of sections.
-            $straddsection = get_string('increasesections', 'moodle');
-            $url = new moodle_url('/course/changenumsections.php',
+            $straddsection = 'Ajouter une section';
+            $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
+            $url = new moodle_url('changenumsections.php',
                 array('courseid' => $course->id,
                       'increase' => true,
-                      'sesskey' => sesskey()));
-            $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1));
+            echo html_writer::span($straddsection." ");
             echo html_writer::link($url, $icon.get_accesshide($straddsection), array('class' => 'increase-sections'));
+            
+            echo '<br/>';
 
-            if ($course->numsections > 0) {
-                // Reduce number of sections sections.
-                $strremovesection = get_string('reducesections', 'moodle');
-                $url = new moodle_url('/course/changenumsections.php',
-                    array('courseid' => $course->id,
-                          'increase' => false,
-                          'sesskey' => sesskey()));
-                $icon = $this->output->pix_icon('t/switch_minus', $strremovesection);
-                echo html_writer::link($url, $icon.get_accesshide($strremovesection), array('class' => 'reduce-sections'));
-            }
-
+            // Add an activity (section with name activity, not visible)
+            /*$url = new moodle_url('changenumsections.php',
+                array('courseid' => $course->id,
+                      'increase' => true,
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1,
+                      'activity' => true ));
+            $straddactivity = 'Ajouter une &eacute;valuation';
+            $icon = $this->output->pix_icon('t/switch_plus', $straddactivity);
+            echo html_writer::span($straddactivity." ");
+            echo html_writer::link($url, $icon.get_accesshide($straddactivity), array('class' => 'increase-sections'));
+            */
             echo html_writer::end_tag('div');
         } else {
             echo $this->end_section_list();
