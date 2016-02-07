@@ -1,4 +1,4 @@
-<?php
+h<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -17,16 +17,16 @@
 /**
  * Theme version info
  *
- * @package    theme_standardold
- * @copyright  2011 Petr Skoda  {@link http://skodak.org}
+ * @package    theme_ocularis_theme
+ * @copyright  2016 Helena Garcia (original FormFactor theme from Patrick Malley)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2013110500; // The current module version (Date: YYYYMMDDXX)
+$plugin->version   = 2015070100; // The current module version (Date: YYYYMMDDXX)
 $plugin->requires  = 2013110500; // Requires this Moodle version
-$plugin->component = 'theme_standardold'; // Full name of the plugin (used for diagnostics)
+$plugin->component = 'theme_ocularis_theme'; // Full name of the plugin (used for diagnostics)
 $plugin->dependencies = array(
-    'theme_standard'  => 2013110500,
+    'theme_canvas'  => 2013110500,
 );

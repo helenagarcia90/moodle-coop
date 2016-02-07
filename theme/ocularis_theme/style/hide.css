@@ -1,0 +1,40 @@
+/******* Hiding info to simplify ********/
+
+/* Course icons */
+.moreinfo, .reduce-sections, .editing_highlight, .moveup, .movedown, .helptooltip, .editing_showhide {
+    visibility: hidden; /* hidden au lieu de visible pour cacher. Helena */
+    height: 0px; /* pour supprimer l'espace  vertical de l'element cache. Helena */
+    width: 0px; /* pour supprimer l'espace  horizontal de l'element cache. Helena */
+    padding: 0px; /* pour supprimer l'espace  additionel de l'element cache. Helena */
+}
+
+/* Section 0 */
+/*#section-0 div {
+    visibility: hidden;
+    height: 0px;
+}*/
+
+/* Increase sections icon */
+.increase-sections .smallicon {
+    height: 20px;
+    padding: 0px;
+}
+
+/* Course resource dropdown */
+li .editing_duplicate, li .editing_moveright, li .editing_assign, {
+    visibility: hidden;
+    height: 0px;
+}
+
+/* Calendar */
+.calendar_filters, .eventskey {
+    visibility: hidden;
+    height: 0px;
+}
+
+/* Sidebar header */
+
+/*.moveto {
+    visibility: hidden;
+    width: 0px;
+}*/

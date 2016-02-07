@@ -18,7 +18,7 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, input, textarea {
 #header-logo {
     width: 220px;
     float: left;
-    background: #fff url('/moodle-esi/theme/esi_theme/pix/logo.jpg') left center no-repeat;
+    background: #fff url('/moodle-coop/theme/ocularis_theme/pix/logo.png') left center no-repeat;
     background-size: auto 100%;
     height: 100%;
 }
@@ -26,7 +26,7 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, input, textarea {
 #header-logo2 {
     width: 220px;
     float: right;
-    background: #fff url('/moodle-esi/theme/esi_theme/pix/logo2.jpg') left center no-repeat;
+    background: #fff url('/moodle-coop/theme/ocularis_theme/pix/logo2.png') left center no-repeat;
     background-size: auto 100%;
     height: 100%;
 }
@@ -112,7 +112,7 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, input, textarea {
     background-position: 0 -25%;
 }
 .mform .btn-cancel {
-    color: #bf3503;
+    color: #0335bf;
     text-decoration: none;
 }
 .mform .btn-cancel:hover,
@@ -169,13 +169,13 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, input, textarea {
 }
 #custommenu .yui3-menu-label,
 #custommenu .yui3-menuitem-content {
-    color: #bf3503;
+    color: #0335bf;
 }
 #custommenu .yui3-menu .yui3-menuitem-active,
 #custommenu .yui3-menu-label-menuvisible,
 #custommenu .yui3-menu-label-active,
 #custommenu .yui3-menuitem-active .yui3-menuitem-content {
-    background-color: #bf3503;
+    background-color: #0335bf;
 }
 #custommenu .yui3-menu-label-active,
 #custommenu .yui3-menu-label-menuvisible,

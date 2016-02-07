@@ -587,11 +587,7 @@ class template_course_renderer extends core_course_renderer {
             $link = html_writer::link($url, $straddresource);
             $output .= ($link);
         }
-<<<<<<< HEAD
         /* Helena */
-=======
-
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
         /*if (!empty($activities[MOD_CLASS_ACTIVITY])) {
             $select = new url_select($activities[MOD_CLASS_ACTIVITY], '', array(''=>$straddactivity), "section$section");
             $select->set_help_icon('activities');

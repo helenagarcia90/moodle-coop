@@ -69,14 +69,8 @@ class template_course_edit_form extends moodleform {
         $mform->setType('category', PARAM_INT);
         $mform->setDefault('category', $category->id);        
         
-<<<<<<< HEAD
         //Sections
         $mform->addElement('hidden', 'theme', '1');    
-=======
-        //DATA = PERIODE
-        $mform->addElement('text', 'lang', 'Nombre de mati&egrave;res');
-        $mform->setDefault('lang', '8'); //provisional number of sections       
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
 
         // Description.
         $mform->addElement('header', 'descriptionhdr', get_string('description'));
@@ -85,15 +79,9 @@ class template_course_edit_form extends moodleform {
         $mform->addHelpButton('summary_editor', 'coursesummary');
         $mform->setType('summary_editor', PARAM_RAW);
         
-<<<<<<< HEAD
         // Hidden elements, we assign default values
         //$mform->addElement('hidden','idnumber', $course->id); //save template id
         //$mform->addElement('hidden', 'lang', 'fr');
-=======
-        // Elements amagats, assignem valors per defecte
-        //$mform->addElement('hidden', 'shortname', $mform->getElementValue('fullname'));
-        //$mform->addElement('hidden','idnumber', "");
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
         $mform->addElement('hidden', 'visible', $courseconfig->hidden);
         $mform->addElement('hidden', 'overviewfiles_filemanager', 0);
         $mform->addElement('hidden', 'format', 'topics');
@@ -263,23 +251,12 @@ class instance_course_edit_form extends moodleform {
         
         //end date proposada
         $mform->addElement('date_selector', 'enddate', 'Date de finalisation');
-<<<<<<< HEAD
         $mform->setDefault('enddate', time()+$days*24*3600);
-=======
-        $mform->setDefault('enddate', time()+$course->lang*7*24*3600);
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
 
         //make the course visible
         $mform->addElement('hidden', 'visible', 1);
         
         $this->add_action_buttons();
-<<<<<<< HEAD
-=======
-        $mform->addElement('hidden', 'id', $course->id);
-        
-        //define number of sections
-        $mform->addElement('hidden', 'lang', $course->lang);
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
         $mform->addElement('hidden', 'format', 'topics');
 
         //we need to put an id, so we keep the old one, for the moment

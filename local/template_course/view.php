@@ -139,11 +139,7 @@
     }
     
     $sesskey = sesskey();
-<<<<<<< HEAD
     if ( $PAGE->user_allowed_editing() ) {
-=======
-    //if ($PAGE->user_allowed_editing()) {
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
         if (confirm_sesskey($sesskey)) {            
             $USER->editing = 1;        
             set_user_preference('usemodchooser', $modchooser);
@@ -269,13 +265,9 @@
     
     //botons
     echo $OUTPUT->single_button(new moodle_url('/local/template_course/edit.php', 
-<<<<<<< HEAD
             array('id'=>$course->id)), 'Paramètres de la matière', 'get');
 
     echo $OUTPUT->single_button(new moodle_url('/local/template_course/index.php', 
             array()), 'Retourner à la liste de matières', 'get');
-=======
-            array('id' => $course->id, /*'edit' => 'on',*/ 'sesskey' => sesskey())), 'Éditer le sujet', 'get');
->>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
 
     echo $OUTPUT->footer();
