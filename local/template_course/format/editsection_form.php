@@ -9,7 +9,10 @@ require_once($CFG->libdir.'/filelib.php');
 require_once($CFG->libdir.'/completionlib.php');
 require_once($CFG->libdir.'/gradelib.php');
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
 /**
  * Default form for editing course section
  *
@@ -21,6 +24,7 @@ class editsection_template_form extends moodleform {
 
         $mform  = $this->_form;
         $course = $this->_customdata['course'];
+<<<<<<< HEAD
         $section = $this->_customdata['cs'];
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
@@ -39,6 +43,27 @@ class editsection_template_form extends moodleform {
         else */$mform->addElement('hidden', 'availablefrom', 0);
 
         // Prepare course and the editor
+=======
+
+        $mform->addElement('header', 'generalhdr', get_string('general'));
+
+        $elementgroup = array();
+        $elementgroup[] = $mform->createElement('text', 'name', '', array('size' => '30', 'maxlength' => '255'));
+        $elementgroup[] = $mform->createElement('checkbox', 'usedefaultname', '', get_string('sectionusedefaultname'));
+        $mform->addGroup($elementgroup, 'name_group', get_string('sectionname'), ' ', false);
+        $mform->addGroupRule('name_group', array('name' => array(array(get_string('maximumchars', '', 255), 'maxlength', 255))));
+
+        $mform->setDefault('usedefaultname', true);
+        $mform->setType('name', PARAM_TEXT);
+        $mform->disabledIf('name','usedefaultname','checked');
+        
+        //duration
+        $mform->addElement('text', 'availablefrom', 'Duration du theme en jours');
+        $mform->setDefault('availablefrom', '1'); //provisional number of sections 
+
+        /// Prepare course and the editor
+
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
         $mform->addElement('editor', 'summary_editor', get_string('summary'), null, $this->_customdata['editoroptions']);
         $mform->addHelpButton('summary_editor', 'summary');
         $mform->setType('summary_editor', PARAM_RAW);
@@ -233,7 +258,10 @@ class editsection_template_form extends moodleform {
                 CONDITION_STUDENTVIEW_HIDE => get_string('showavailabilitysection_hide', 'condition'));
             $mform->addElement('select', 'showavailability',
                     get_string('showavailabilitysection', 'condition'), $showhide);
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
         }
 
         $this->add_action_buttons();

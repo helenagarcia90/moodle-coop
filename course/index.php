@@ -43,8 +43,12 @@ if ($categoryid) {
     // And the object has been loaded for us no need for another DB call
     $category = $PAGE->category;
 } else {
+<<<<<<< HEAD
     $categoryid=1;
     $category = $DB->get_record('course_categories', array('id'=>$categoryid), '*', MUST_EXIST); 
+=======
+    $categoryid = 1;
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
     $PAGE->set_url('/course/index.php');
     $PAGE->set_context(context_system::instance());
 }

@@ -29,7 +29,10 @@ require_once("../../../config.php");
 require_once("../lib.php");
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->libdir . '/conditionlib.php');
+<<<<<<< HEAD
 require_once($CFG->libdir.'/filelib.php');
+=======
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
 
 $id = required_param('id', PARAM_INT);    // course_sections.id
 $sectionreturn = optional_param('sr', 0, PARAM_INT);
@@ -62,13 +65,22 @@ $mform = new editsection_template_form($PAGE->url, $customdata);
 // set current value, make an editable copy of section_info object
 // this will retrieve all format-specific options as well
 $mform->set_data(convert_to_array($sectioninfo));
+<<<<<<< HEAD
+=======
+print 'fff';
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
 
 if ($mform->is_cancelled()){
     // Form cancelled, return to course.
     redirect(course_get_url($course, $section, array('sr' => $sectionreturn)));
 } else if ($data = $mform->get_data()) {
+<<<<<<< HEAD
     // Data submitted and validated, update and return to course.  
 
+=======
+    // Data submitted and validated, update and return to course.
+    print 'edit';
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
     $DB->update_record('course_sections', $data);
     rebuild_course_cache($course->id, true);
     if (isset($data->section)) {
@@ -88,7 +100,11 @@ if ($mform->is_cancelled()){
         $data->section = $sectionnum;
     }
     // Trigger an event for course section update.
+<<<<<<< HEAD
     /*$event = \core\event\course_section_updated::create(
+=======
+    $event = \core\event\course_section_updated::create(
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
             array(
                 'objectid' => $data->id,
                 'courseid' => $course->id,
@@ -96,11 +112,39 @@ if ($mform->is_cancelled()){
                 'other' => array('sectionnum' => $data->section)
             )
         );
+<<<<<<< HEAD
     $event->trigger();*/
+=======
+    $event->trigger();
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
     
     //create or update event with section dates info
     require_once($CFG->dirroot. '/calendar/lib.php');
 
+<<<<<<< HEAD
+=======
+    $event = new stdClass;
+            $event->name         = 'Section '.$data->section;
+            $event->description  = '';
+            $event->courseid     = $course->id;
+            $event->groupid      = 0;
+            $event->userid       = 0;
+            $event->modulename   = '';
+            $event->instance     = $data->section;
+            $event->eventtype    = 'course'; // For activity module's events, this can be used to set the alternative text of the event icon. Set it to 'pluginname' unless you have a better string.
+            $date = usergetdate(time());
+            list($d, $m, $y) = array($date['mday'], $date['mon'], $date['year']);            
+            $event->timestart    = make_timestamp($y, $m, 1);
+            $event->visible      = 1;
+            $event->timeduration = $data->availablefrom*24*3600;
+            if($existentevent = $DB->get_record('event', array('courseid' =>$course->id, 'instance' => $data->section))){
+                $event->id = $existentevent->id;
+                $DB->update_record('event', $event);
+                print 'ttt';
+            }else{
+                calendar_event::create($event);
+            }
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
     $PAGE->navigation->clear_cache();
     redirect(course_get_url($course, $section, array('sr' => $sectionreturn)));
 }

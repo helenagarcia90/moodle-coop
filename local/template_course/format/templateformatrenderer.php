@@ -117,7 +117,11 @@ class format_template_section_renderer extends format_section_renderer_base {
             }
             $lastsection = $section;
         }
+<<<<<<< HEAD
         if ( $PAGE->user_is_editing() and has_capability('moodle/course:update', $context) ) {
+=======
+        if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
             // Print stealth sections if present.
             foreach ($modinfo->get_section_info_all() as $section => $thissection) {
                 if ($section <= $course->numsections or empty($modinfo->sections[$section])) {
@@ -132,16 +136,39 @@ class format_template_section_renderer extends format_section_renderer_base {
 
             echo $this->end_section_list();
 
+<<<<<<< HEAD
             echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-left'));
             
             // Increase number of sections.
             $straddsection = 'Ajouter une section';
             $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
             $url = new moodle_url('changenumsections.php',
+=======
+            echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
+            
+            // add an activity (section with name activity, not visible)
+            $url = new moodle_url('format/changenumsections.php',
+                array('courseid' => $course->id,
+                      'increase' => true,
+                      'sesskey' => sesskey(),
+                      'sectionid' => $lastsection+1,
+                      'activity' => true ));
+            $straddactivity = 'Ajouter une &eacute;valuation';
+            $icon = $this->output->pix_icon('t/switch_plus', $straddactivity);
+            echo html_writer::span($straddactivity." ");
+            echo html_writer::link($url, $icon.get_accesshide($straddactivity), array('class' => 'increase-sections'));
+            
+            echo '<br/>';
+            
+            // Increase number of sections.
+            $straddsection = get_string('increasesections', 'moodle');
+            $url = new moodle_url('format/changenumsections.php',
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
                 array('courseid' => $course->id,
                       'increase' => true,
                       'sesskey' => sesskey(),
                       'sectionid' => $lastsection+1));
+<<<<<<< HEAD
             echo html_writer::span($straddsection." ");
             echo html_writer::link($url, $icon.get_accesshide($straddsection), array('class' => 'increase-sections'));
             
@@ -159,6 +186,13 @@ class format_template_section_renderer extends format_section_renderer_base {
             echo html_writer::span($straddactivity." ");
             echo html_writer::link($url, $icon.get_accesshide($straddactivity), array('class' => 'increase-sections'));
             */
+=======
+            $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
+            echo html_writer::span($straddsection." ");
+            echo html_writer::link($url, $icon.get_accesshide($straddsection), array('class' => 'increase-sections'));
+            
+
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
             echo html_writer::end_tag('div');
 
         } else {
@@ -220,7 +254,11 @@ class format_template_section_renderer extends format_section_renderer_base {
         $o.= $this->format_summary_text($section);
 
         $context = context_course::instance($course->id);
+<<<<<<< HEAD
         if ($PAGE->user_is_editing() && has_capability('moodle/course:update', $context) ) {
+=======
+        if ($PAGE->user_is_editing() && has_capability('moodle/course:update', $context)) {
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
             $url = new moodle_url('format/editsection.php', array('id'=>$section->id, 'sr'=>$sectionreturn));
             $o.= html_writer::link($url,
                 html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/settings'),

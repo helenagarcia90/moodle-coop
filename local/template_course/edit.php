@@ -134,10 +134,17 @@ if ($editform->is_cancelled()) {
 
 } else if ($data = $editform->get_data()) { //retorna NULL si no esta cancelat, si esta submit i si esta ben validat
     // Process data if submitted.
+<<<<<<< HEAD
     if (empty($id))
         $data->numsections = $data->theme;
     $data->shortname = $data->fullname;
 
+=======
+    $data->numsections = $data->lang;
+    $data->shortname = $data->fullname;
+    $data->idnumber = "";
+    var_dump($data);
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f
     if (empty($course->id)) {
         $course = create_course($data, $editoroptions);
 

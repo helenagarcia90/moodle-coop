@@ -26,8 +26,13 @@
  */
 global $CFG;
 
+<<<<<<< HEAD:local/template_course/changenumsections.php
 require_once(dirname(__FILE__).'/../../config.php');
 require_once('lib.php');
+=======
+require_once(dirname(__FILE__).'/../../../config.php');
+require_once('../lib.php');
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f:local/template_course/format/changenumsections.php
 require_once($CFG->dirroot. '/calendar/lib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
@@ -56,6 +61,7 @@ global $DB;
         $cw->summary  = '';
         $cw->summaryformat = FORMAT_HTML;
         $cw->sequence = '';
+<<<<<<< HEAD:local/template_course/changenumsections.php
 
         if($activity){
             $cw->name = "Évaluation";
@@ -64,6 +70,29 @@ global $DB;
 
         $id = $DB->insert_record("course_sections", $cw);
 
+=======
+        if($activity){
+            $cw->name = "&Eacute;valuation";
+        }
+        else {
+            $event = new stdClass;
+            $event->name         = 'Section '.$sectionid;
+            $event->description  = '';
+            $event->courseid     = $courseid;
+            $event->groupid      = 0;
+            $event->userid       = 0;
+            $event->modulename   = '';
+            $event->instance     = $sectionid;
+            $event->eventtype    = 'due'; // For activity module's events, this can be used to set the alternative text of the event icon. Set it to 'pluginname' unless you have a better string.
+            $date = usergetdate(time());
+            list($d, $m, $y) = array($date['mday'], $date['mon'], $date['year']);            
+            $event->timestart    = make_timestamp($y, $m, 1);
+            $event->visible      = 1;
+            $event->timeduration = 20000000;
+            calendar_event::create($event);
+        }
+        $id = $DB->insert_record("course_sections", $cw);
+>>>>>>> e5b1d3c3c668bccc8f8d9f832ffedb356ea9b61f:local/template_course/format/changenumsections.php
  } else if($delete && isset($courseformatoptions['numsections'])){
         $DB->delete_records('course_sections',array('course' => $courseid, 'section' => $sectionid));
         // Remove a section.
