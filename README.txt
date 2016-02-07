@@ -12,29 +12,4 @@ A template course is like a subject structure, only with the skeleton, descripti
 
 # Configuration
 
-(Should create config.php in the root directory with the content below (and adding properly user, password, etc)
-
-```
-<?php  // Moodle configuration file
-unset($CFG);
-global $CFG;
-$CFG = new stdClass();
-$CFG->dbtype    = 'mysqli';
-$CFG->dblibrary = 'native';
-$CFG->dbhost    = 'localhost';
-$CFG->dbname    = 'moodle';
-$CFG->dbuser    = 'user';
-$CFG->dbpass    = 'password';
-$CFG->prefix    = 'mdl_';
-$CFG->dboptions = array (
-  'dbpersist' => 0,
-  'dbsocket' => 0,
-);
-$CFG->wwwroot   = 'http://localhost/moodle';
-$CFG->dataroot  = 'C:\\xampp\\moodledata';
-$CFG->admin     = 'admin';
-$CFG->directorypermissions = 0777;
-require_once(dirname(__FILE__) . '/lib/setup.php');
-// There is no php closing tag in this file,
-// it is intentional because it prevents trailing whitespace problems!
-```
+See the Wiki page.
