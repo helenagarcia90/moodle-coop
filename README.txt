@@ -2,8 +2,6 @@ Moodle Coop
 =============
 # Description
 
-This Moodle platform was originally modified for a collaboration with l'École Superieure d'Informatique de Bobo-Dioulasso (Burkina Faso). 
-
 The main features are the following:
 
 * UI simplification, by creating a personalized theme which priorizes cleanliness and easy site navigation. 
@@ -14,4 +12,4 @@ A template course is like a subject structure, only with the skeleton, descripti
 
 # Configuration
 
-See the Wiki page.
+See the Wiki page: https://github.com/helenagarcia90/moodle-coop/wiki
