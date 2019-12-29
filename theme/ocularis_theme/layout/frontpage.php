@@ -34,6 +34,12 @@ echo $OUTPUT->doctype() ?>
         <div id="header-logo"></div><!-- we place the 1st logo. Helena -->
         <div id="page-header-wrapper">
             <h1 class="headermain"><?php //echo $PAGE->heading ?></h1>
+        </div>
+        <div id="header-logo2"></div><!-- we place the 2nd logo. Helena -->
+    </div>
+
+    <?php if ($hascustommenu) { ?>
+      <div id="custommenu"><?php echo $custommenu; ?>
             <div class="headermenu">
                 <?php
                     echo $OUTPUT->login_info();
@@ -41,12 +47,7 @@ echo $OUTPUT->doctype() ?>
                     echo $PAGE->headingmenu;
                 ?>
             </div>
-        </div>
-        <div id="header-logo2"></div><!-- we place the 2nd logo. Helena -->
-    </div>
-
-    <?php if ($hascustommenu) { ?>
-      <div id="custommenu"><?php echo $custommenu; ?></div>
+      </div>
     <?php } else { ?>
       <ul id="page-navigation" class="clearfix">
         <li>&nbsp;</li>
@@ -96,8 +97,10 @@ echo $OUTPUT->doctype() ?>
 <!-- START OF FOOTER -->
 
     <div id="page-footer">
-            <p>e-Learning de l'Hôpital Abass N'Dao</p> <!-- new footer info. Helena -->
-            <p>Pour rapporter une erreur contacter: hgarcia @ ocularis-jp . com</p>
+            <img src="<?php print $CFG->wwwroot; ?>/theme/ocularis_theme/pix/logo3.jpg" style="height:50px;" />
+            <img src="<?php print $CFG->wwwroot; ?>/theme/ocularis_theme/pix/logo4.gif" style="height:50px;" />
+            <p><b>Plateforme e-Learning de l'Hôpital Abass N'Dao</b></p> <!-- new footer info. Helena -->
+            <p>Pour rapporter une erreur contacter: hgarcia @ ocularis-jp . org</p>
     </div>
 
 <!-- END OF FOOTER -->

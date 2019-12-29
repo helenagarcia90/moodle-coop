@@ -29,7 +29,7 @@ if ($hassidepre && !$hassidepost) {
 }
 
 echo $OUTPUT->doctype() ?>
-<html <?php echo $OUTPUT->htmlattributes() ?>>
+<html <?php echo $OUTPUT->htmlattributes() ?> >
 <head>
     <title><?php echo $PAGE->title ?></title>
     <link rel="shortcut icon" href="<?php echo $OUTPUT->pix_url('favicon', 'theme')?>" />
@@ -51,15 +51,6 @@ echo $OUTPUT->doctype() ?>
         <div id="page-header-wrapper">
             <?php if ($hasheading) { ?>
                 <h1 class="headermain"><?php //echo $PAGE->heading ?></h1> <!-- cacher le text par defaut dans le banner. Helena -->
-                <div class="headermenu">
-                    <?php
-                        echo $OUTPUT->login_info();
-                        if (!empty($PAGE->layout_options['langmenu'])) {
-                            echo $OUTPUT->lang_menu();
-                        }
-                        echo $PAGE->headingmenu
-                    ?>
-                </div>
             <?php } ?>
         </div>
         <div id="header-logo2"></div><!-- we place the 2nd logo. Helena -->
@@ -67,7 +58,17 @@ echo $OUTPUT->doctype() ?>
 
     <?php if ($hasheading) { ?>
       <?php if ($hascustommenu) { ?>
-        <div id="custommenu"><?php echo $custommenu; ?></div>
+        <div id="custommenu"><?php echo $custommenu; ?>
+            <div class="headermenu">
+                <?php
+                    echo $OUTPUT->login_info();
+                    if (!empty($PAGE->layout_options['langmenu'])) {
+                        echo $OUTPUT->lang_menu();
+                    }
+                    echo $PAGE->headingmenu
+                ?>
+            </div>
+        </div>
       <?php } else { ?>
         <ul id="page-navigation" class="clearfix">
           <li>&nbsp;</li>
@@ -128,11 +129,13 @@ echo $OUTPUT->doctype() ?>
 <?php if (!empty($coursefooter)) { ?>
 <div id="course-footer"><?php echo $coursefooter; ?></div>
 <?php } ?>
-
+<?php global $CFG; ?>
 <!-- START OF FOOTER -->
     <div id="page-footer">
-            <p>e-Learning de l'Hôpital Abass N'Dao</p> <!-- new footer info. Helena -->
-            <p>Pour rapporter une erreur contacter: hgarcia @ ocularis-jp . com</p>
+            <img src="<?php print $CFG->wwwroot; ?>/theme/ocularis_theme/pix/logo3.jpg" style="height:50px;" />
+            <img src="<?php print $CFG->wwwroot; ?>/theme/ocularis_theme/pix/logo4.gif" style="height:50px;" />
+            <p><b>Plateforme e-Learning de l'Hôpital Abass N'Dao</b></p> <!-- new footer info. Helena -->
+            <p>Pour rapporter une erreur contacter: hgarcia @ ocularis-jp . org</p>
     </div>
 </div>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
