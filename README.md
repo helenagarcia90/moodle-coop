@@ -7,7 +7,7 @@ This is a Moodle 2.X platform modification originally created for a collaboratio
 It has been forked, modified, adapted and integrated in these **cooperation projects**:
 * Cooperation project between Universitat Politècnica de Catalunya (UPC) and École Superieure d'Informatique de Bobo-Dioulasso (ESI, Burkina Faso) --> see: https://github.com/helenagarcia90/moodle-esi
 * Cooperation project between Ocularis Associació (www.ocularis.ong) and Université Cheikh Anta Diop de Dakar (UCAD, à l'Hôpital Abass N'Dao) --> see: https://github.com/helenagarcia90/moodle-29 and http://ocularis-senegal.org/moodle/
-* Cooperation project between Ocularis Associació (www.ocularis.ong) and Faculdade de Ciencias da Salude - Universidade de LÚRIO (FCS-UNILURIO) to help the creation of the first course of Pediatric Optometry Postgrade in all the African continent--> see: https://github.com/helenagarcia90/moodle-unilurio, https://unilurio.ocularis.ong/ and “20190417 Convenio FCS-UNILURIO.pdf”
+* Cooperation project between Ocularis Associació (www.ocularis.ong) and Faculdade de Ciencias da Salude - Universidade de LÚRIO (FCS-UNILURIO) to help the creation of the first course of Pediatric Optometry Postgrade in all the African continent--> see: https://github.com/helenagarcia90/moodle-unilurio and http://unilurio.ocularis.ong
 
 The **main changes/features** are the following:
 
